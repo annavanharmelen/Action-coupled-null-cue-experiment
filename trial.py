@@ -12,7 +12,7 @@ from psychopy.core import wait
 from time import time, sleep
 from response import get_response
 from stimuli import (
-    create_fixation_cross,
+    create_fixation_dot,
     create_capture_cue_frame,
     create_stimuli_frame,
 )
@@ -90,11 +90,11 @@ def single_trial(
     eyetracker=None,
 ):
     # Initial fixation cross to eliminate jitter caused by for loop
-    create_fixation_cross(settings)
+    create_fixation_dot(settings)
 
     screens = [
         (0, lambda: 0 / 0, None),  # initial one to make life easier
-        (0.5, lambda: create_fixation_cross(settings), None),
+        (0.5, lambda: create_fixation_dot(settings), None),
         (
             0.25,
             lambda: create_stimuli_frame(
@@ -102,14 +102,14 @@ def single_trial(
             ),
             "stimuli_onset",
         ),
-        (0.75, lambda: create_fixation_cross(settings), None),
+        (0.75, lambda: create_fixation_dot(settings), None),
         (
             0.25,
             lambda: create_capture_cue_frame(capture_colour, settings),
             "capture_cue_onset",
         ),
-        (1.25, lambda: create_fixation_cross(settings), None),
-        (None, lambda: create_fixation_cross(settings, target_colour), None),
+        (1.25, lambda: create_fixation_dot(settings), None),
+        (None, lambda: create_fixation_dot(settings, target_colour), None),
     ]
 
     # !!! The timing you pass to do_while_showing is the timing for the previously drawn screen. !!!
@@ -146,7 +146,7 @@ def single_trial(
         eyetracker.tracker.send_message(f"trig{trigger}")
 
     # Show performance
-    create_fixation_cross(settings)
+    create_fixation_dot(settings)
     show_text(
         f"{response['performance']}", settings["window"], (0, settings["deg2pix"](0.7))
     )

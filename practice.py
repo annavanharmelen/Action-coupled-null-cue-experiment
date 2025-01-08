@@ -11,7 +11,7 @@ from trial import (
     generate_stimuli_characteristics,
     show_text,
 )
-from stimuli import make_one_bar, create_fixation_cross
+from stimuli import make_one_bar, create_fixation_dot
 from response import get_response, wait_for_key
 from psychopy import event
 from psychopy.hardware.keyboard import Keyboard
@@ -56,7 +56,7 @@ def practice(testing, settings):
                 [practice_bar],
             )
 
-            create_fixation_cross(settings)
+            create_fixation_dot(settings)
             show_text(
                 f"{report['performance']}",
                 settings["window"],

@@ -9,7 +9,7 @@ made by Anna van Harmelen, 2025
 from psychopy import core, visual, event
 from psychopy.hardware.keyboard import Keyboard
 from math import cos, sin, degrees
-from stimuli import create_fixation_cross
+from stimuli import create_fixation_dot
 from time import time
 from eyetracker import get_trigger
 
@@ -158,7 +158,7 @@ def get_response(
         dial_circle.draw()
         top_dial.draw()
         bottom_dial.draw()
-        create_fixation_cross(settings, target_colour)
+        create_fixation_dot(settings, target_colour)
 
         window.flip()
 
