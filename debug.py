@@ -1,8 +1,8 @@
 """
 This script is used to test random aspects
-of the 'null-cue gaze bias' experiment.
+of the 'action coupled null-cue' experiment.
 
-made by Anna van Harmelen, 2023
+made by Anna van Harmelen, 2025
 """
 
 from psychopy import visual

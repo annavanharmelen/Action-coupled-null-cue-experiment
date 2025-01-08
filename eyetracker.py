@@ -1,9 +1,9 @@
 """
 This file contains the functions necessary for
 connecting and using the eyetracker.
-To run the 'null-cue gaze bias' experiment, see main.py.
+To run the 'action coupled null-cue' experiment, see main.py.
 
-made by Anna van Harmelen, 2023, using code by Rose Nasrawi
+made by Anna van Harmelen, 2025, using code by Rose Nasrawi
 """
 
 from lib import eyelinker

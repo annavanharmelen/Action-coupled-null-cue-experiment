@@ -1,9 +1,9 @@
 """
 This file contains the functions necessary for
 creating the interactive response dial at the end of a trial.
-To run the 'null-cue gaze bias' experiment, see main.py.
+To run the 'action coupled null-cue' experiment, see main.py.
 
-made by Anna van Harmelen, 2023
+made by Anna van Harmelen, 2025
 """
 
 from psychopy import core, visual, event
