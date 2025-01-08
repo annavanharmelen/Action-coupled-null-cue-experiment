@@ -33,12 +33,13 @@ def get_monitor_and_dir(testing: bool):
         }
 
         directory = r"C:\Users\Anna_vidi\Desktop\data"
-    
+
     return monitor, directory
+
 
 def get_settings(monitor: dict, directory):
     window = visual.Window(
-        color=('#7F7F7F'),
+        color=("#7F7F7F"),
         size=monitor["resolution"],
         units="pix",
         fullscr=True,
@@ -50,17 +51,11 @@ def get_settings(monitor: dict, directory):
 
     return dict(
         deg2pix=lambda deg: round(deg / degrees_per_pixel),
-  
         # move the dial a quarter circle per second
-        dial_step_size=(0.5 * pi) / monitor["Hz"],  
-
+        dial_step_size=(0.5 * pi) / monitor["Hz"],
         window=window,
-
         keyboard=Keyboard(),
-
         mouse=visual.CustomMouse(win=window, visible=False),
-
         monitor=monitor,
-
         directory=directory,
     )

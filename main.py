@@ -119,12 +119,19 @@ def main():
             calibrated = True
             if block + 1 == N_BLOCKS // 2:
                 while calibrated:
-                    calibrated = long_break(N_BLOCKS, settings, eyetracker=None if testing else eyelinker)
+                    calibrated = long_break(
+                        N_BLOCKS, settings, eyetracker=None if testing else eyelinker
+                    )
                 if not testing:
                     eyelinker.start()
             elif block + 1 < N_BLOCKS:
                 while calibrated:
-                    calibrated = block_break(block + 1, N_BLOCKS, settings, eyetracker=None if testing else eyelinker)
+                    calibrated = block_break(
+                        block + 1,
+                        N_BLOCKS,
+                        settings,
+                        eyetracker=None if testing else eyelinker,
+                    )
 
         finished_early = False
 
@@ -140,7 +147,9 @@ def main():
         )
 
         # Register how many trials this participant has completed
-        new_participants.loc[new_participants.index[-1], "trials_completed"] = str(len(data))
+        new_participants.loc[new_participants.index[-1], "trials_completed"] = str(
+            len(data)
+        )
 
         # Save participant data to existing .csv file
         new_participants.to_csv(

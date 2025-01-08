@@ -5,6 +5,7 @@ To run the 'action coupled null-cue' experiment, see main.py.
 
 made by Anna van Harmelen, 2025
 """
+
 import random
 from trial import show_text
 from response import wait_for_key
