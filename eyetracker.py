@@ -48,17 +48,36 @@ class Eyelinker:
         self.tracker.close_edf()
 
 
-def get_trigger(frame, condition, target_position):
-    condition_marker = {"congruent": 1, "incongruent": 3, "neutral": 5}[condition]
+def get_trigger(block_type, frame, cue_colour, condition, target_position):
+    # Check input validity
+    if (
+        cue_colour == "colour_3"
+        and condition != "neutral"
+        or cue_colour != "colour_3"
+        and condition == "neutral"
+    ):
+        raise Exception("Invalid combination of cue colour and condition.")
+
+    # Determine condition marker
+    condition_marker = {"colour_1": 1, "colour_2": 5, "colour_3": 9}[cue_colour]
+
+    condition_marker = (
+        condition_marker + {"congruent": 0, "incongruent": 2, "neutral": 0}[condition]
+    )
 
     if target_position == "right":
         condition_marker += 1
 
+    if block_type == "respond not colour_3":
+        condition_marker += 10
+
+    # Return trigger (frame + condition marker)
     return {
-        "stimuli_onset": "",
-        "capture_cue_onset": "1",
-        "probe_cue_onset": "2",
-        "response_onset": "3",
-        "response_offset": "4",
-        "feedback_onset": "5",
+        "stimuli_onset": "1",
+        "capture_cue_onset": "2",
+        "cue_response_onset": "3",
+        "probe_cue_onset": "4",
+        "response_onset": "5",
+        "response_offset": "6",
+        "feedback_onset": "7",
     }[frame] + str(condition_marker)
