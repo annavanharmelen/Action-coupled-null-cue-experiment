@@ -26,12 +26,26 @@ def create_blocks(n_blocks):
     return blocks
 
 def create_block(n_trials):
-    if n_trials % 6 != 0:
-        raise Exception("Expected number of trials to be divisible by 6.")
+    if n_trials % 12 != 0:
+        raise Exception("Expected number of trials to be divisible by 12.")
 
-    trials = (n_trials // 6) * list(
-        zip(2 * ["neutral", "congruent", "incongruent"], 3 * ["left", "right"])
+    # Generate equal distribution of cue colours
+    cue_colours = (
+        n_trials // 3 * ["colour_1"]
+        + n_trials // 3 * ["colour_2"]
+        + n_trials // 3 * ["colour_3"]
     )
+
+    # Generate equal distribution of congruencies,
+    congruencies = n_trials // 6 * (
+        n_trials // 6 * ["congruent"] + n_trials // 6 * ["incongruent"]
+    ) + n_trials // 3 * ["neutral"]
+
+    # Generate equal distribution of target locations
+    target_locations = n_trials // 2 * ["left", "right"]
+
+    # Create trial parameters for all trials
+    trials = list(zip(cue_colours, congruencies, target_locations))
     random.shuffle(trials)
 
     return trials
