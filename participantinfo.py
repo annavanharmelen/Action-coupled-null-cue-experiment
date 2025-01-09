@@ -27,8 +27,19 @@ def get_participant_details(existing_participants: pd.DataFrame, testing):
     # Insert session number
     session = max(existing_participants.session_number) + 1
 
+    # Determine colour assignment
+    total_options = 8 * ["red", "green", "blue"]
+
+    for option in total_options:
+        if option in existing_participants.colour_assignment.tolist():
+            total_options.remove(option)
+
+    random.shuffle(total_options)
+    colour_assignment = total_options[0]
+
+    # Add newly made participant
     new_participant = pd.DataFrame(
-        {"age": [age], "participant_number": [participant], "session_number": [session]}
+        {"age": [age], "participant_number": [participant], "session_number": [session], "colour_assignment": [colour_assignment]}
     )
     all_participants = pd.concat(
         [existing_participants, new_participant], ignore_index=True
