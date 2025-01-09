@@ -10,6 +10,20 @@ import random
 from trial import show_text
 from response import wait_for_key
 
+def create_blocks(n_blocks):
+    if n_blocks % 2 != 0:
+        raise Exception("Expected number of blocks to be divisible by 2.")
+
+    # Generate an equal number of blocks of all types
+    block_types = ["respond colour_3", "respond not colour_3"]
+    blocks = (n_blocks // 2) * block_types
+    
+    random.shuffle(blocks)
+
+    # Save list of sets of block numbers (in order) + block types
+    blocks = list(zip(range(1, n_blocks + 1), blocks))
+
+    return blocks
 
 def create_block(n_trials):
     if n_trials % 6 != 0:
