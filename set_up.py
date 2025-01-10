@@ -9,6 +9,13 @@ made by Anna van Harmelen, 2025
 from psychopy import visual
 from psychopy.hardware.keyboard import Keyboard
 from math import degrees, atan2, pi
+import random
+
+# COLOURS = blue, pink, green, orange
+COLOURS = [[19, 146, 206], [217, 103, 241], [101, 148, 14], [238, 104, 60]]
+COLOURS = [
+    [(rgb_value / 128 - 1) for rgb_value in rgb_triplet] for rgb_triplet in COLOURS
+]
 
 
 def get_monitor_and_dir(testing: bool):
@@ -37,7 +44,7 @@ def get_monitor_and_dir(testing: bool):
     return monitor, directory
 
 
-def get_settings(monitor: dict, directory):
+def get_settings(monitor: dict, directory, colour_assignment):
     window = visual.Window(
         color=("#7F7F7F"),
         size=monitor["resolution"],
@@ -49,6 +56,10 @@ def get_settings(monitor: dict, directory):
         0.5 * monitor["resolution"][0]
     )
 
+    colour_3 = {"red": COLOURS[3], "blue": COLOURS[0], "green": COLOURS[2]}[colour_assignment]
+    COLOURS.remove(colour_3)
+    [colour_1, colour_2] = random.sample(COLOURS, 2)
+
     return dict(
         deg2pix=lambda deg: round(deg / degrees_per_pixel),
         # move the dial a quarter circle per second
@@ -58,4 +69,5 @@ def get_settings(monitor: dict, directory):
         mouse=visual.CustomMouse(win=window, visible=False),
         monitor=monitor,
         directory=directory,
+        colours=[colour_1,colour_2,colour_3],
     )
