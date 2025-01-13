@@ -19,6 +19,7 @@ import datetime as dt
 from block import (
     create_blocks,
     create_block,
+    show_block_type,
     block_break,
     long_break,
     finish,
@@ -92,6 +93,16 @@ def main():
         for block_nr, block_type in blocks:
             # Pseudo-randomly create conditions and target locations (so they're weighted)
             block_info = create_block(12 if testing else TRIALS_PER_BLOCK)
+
+            # Remind participant of block type
+            calibrated = True
+            while calibrated:
+                calibrated = show_block_type(
+                    block_type,
+                    colour_assignment,
+                    settings,
+                    eyetracker=None if testing else eyelinker,
+                )
 
             # Run trials per pseudo-randomly created info
             for cue_colour, condition, target_bar in block_info:

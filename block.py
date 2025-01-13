@@ -10,6 +10,7 @@ import random
 from trial import show_text
 from response import wait_for_key
 
+
 def create_blocks(n_blocks):
     if n_blocks % 2 != 0:
         raise Exception("Expected number of blocks to be divisible by 2.")
@@ -17,7 +18,7 @@ def create_blocks(n_blocks):
     # Generate an equal number of blocks of all types
     block_types = ["respond 3", "respond not 3"]
     blocks = (n_blocks // 2) * block_types
-    
+
     random.shuffle(blocks)
 
     # Save list of sets of block numbers (in order) + block types
@@ -25,16 +26,13 @@ def create_blocks(n_blocks):
 
     return blocks
 
+
 def create_block(n_trials):
     if n_trials % 12 != 0:
         raise Exception("Expected number of trials to be divisible by 12.")
 
     # Generate equal distribution of cue colours
-    cue_colours = (
-        n_trials // 3 * [1]
-        + n_trials // 3 * [2]
-        + n_trials // 3 * [3]
-    )
+    cue_colours = n_trials // 3 * [1] + n_trials // 3 * [2] + n_trials // 3 * [3]
 
     # Generate equal distribution of congruencies,
     congruencies = n_trials // 6 * (
@@ -49,6 +47,25 @@ def create_block(n_trials):
     random.shuffle(trials)
 
     return trials
+
+
+def show_block_type(block_type, colour_assigned, settings, eyetracker):
+    show_text(
+        "Next: " f"respond {'NOT ' if block_type == 'respond not 3' else ''}{colour_assigned}",
+        settings["window"],
+    )
+    settings["window"].flip()
+
+    if eyetracker:
+        keys = wait_for_key(["space", "c"], settings["keyboard"])
+        if "c" in keys:
+            eyetracker.calibrate()
+            eyetracker.start()
+            return True
+    else:
+        wait_for_key(["space"], settings["keyboard"])
+
+    return False
 
 
 def block_break(current_block, n_blocks, settings, eyetracker):
