@@ -44,12 +44,13 @@ def main():
             "session_number": int,
             "age": int,
             "trials_completed": str,
+            "colour_assignment": str,
         },
     )
-    new_participants = get_participant_details(old_participants, testing)
+    new_participants, colour_assignment = get_participant_details(old_participants, testing)
 
     # Initialise set-up
-    settings = get_settings(monitor, directory)
+    settings = get_settings(monitor, directory, colour_assignment)
 
     # Connect to eyetracker and calibrate it
     if not testing:
@@ -81,12 +82,12 @@ def main():
             block_info = create_block(6 if testing else TRIALS_PER_BLOCK)
 
             # Run trials per pseudo-randomly created info
-            for condition, target_bar in block_info:
+            for cue_colour, condition, target_bar in block_info:
                 current_trial += 1
                 start_time = time()
 
                 stimuli_characteristics: dict = generate_stimuli_characteristics(
-                    condition, target_bar
+                    cue_colour, condition, target_bar
                 )
 
                 # Generate trial
