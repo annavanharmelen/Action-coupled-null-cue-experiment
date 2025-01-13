@@ -80,8 +80,8 @@ def make_circle(rad, settings, pos=(0, 0), handle=False):
     return circle
 
 
-def make_dial(settings):
-    dial_circle = make_circle(RESPONSE_DIAL_SIZE, settings)
+def make_dial(settings, colour=None):
+    dial_circle = make_circle(RESPONSE_DIAL_SIZE, settings, colour=colour)
     top_dial = make_circle(
         RESPONSE_DIAL_SIZE / 15,
         settings,
@@ -140,7 +140,7 @@ def get_response(
     # - the participant released the rotation key
     # - a second passed
 
-    dial_circle, top_dial, bottom_dial = make_dial(settings)
+    dial_circle, top_dial, bottom_dial = make_dial(settings, target_colour)
 
     if not testing and eyetracker:
         trigger = get_trigger("response_onset", trial_condition, target_bar)
