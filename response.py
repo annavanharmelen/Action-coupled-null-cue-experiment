@@ -95,7 +95,7 @@ def get_response(
 
     # These timing systems should start at the same time, this is almost true
     idle_reaction_time_start = time()
-    keyboard.clock.reset()
+    keyboard.clock.reset() #this reset ensures that premature key timings are relative to probe onset
 
     # Check if _any_ keys were prematurely pressed
     prematurely_pressed = [(p.name, p.rt) for p in keyboard.getKeys()]
