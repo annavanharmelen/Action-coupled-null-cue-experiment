@@ -15,7 +15,7 @@ def create_blocks(n_blocks):
         raise Exception("Expected number of blocks to be divisible by 2.")
 
     # Generate an equal number of blocks of all types
-    block_types = ["respond colour_3", "respond not colour_3"]
+    block_types = ["respond 3", "respond not 3"]
     blocks = (n_blocks // 2) * block_types
     
     random.shuffle(blocks)
@@ -31,9 +31,9 @@ def create_block(n_trials):
 
     # Generate equal distribution of cue colours
     cue_colours = (
-        n_trials // 3 * ["colour_1"]
-        + n_trials // 3 * ["colour_2"]
-        + n_trials // 3 * ["colour_3"]
+        n_trials // 3 * [1]
+        + n_trials // 3 * [2]
+        + n_trials // 3 * [3]
     )
 
     # Generate equal distribution of congruencies,

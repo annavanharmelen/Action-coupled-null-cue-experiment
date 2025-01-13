@@ -15,18 +15,21 @@ from stimuli import (
     create_fixation_dot,
     create_capture_cue_frame,
     create_stimuli_frame,
+    create_probe_cue_frame,
 )
 from eyetracker import get_trigger
 import random
 
-COLOURS = [[19, 146, 206], [217, 103, 241], [101, 148, 14], [238, 104, 60]]
-COLOURS = [
-    [(rgb_value / 128 - 1) for rgb_value in rgb_triplet] for rgb_triplet in COLOURS
-]
 
-
-def generate_stimuli_characteristics(condition, target_bar):
-    neutral_colour, *stimuli_colours = random.sample(COLOURS, 3)
+def generate_stimuli_characteristics(cue_colour, condition, target_bar, settings):
+    if condition == "congruent":
+        target_colour = settings["colours"][cue_colour - 1]
+        distractor_colour = settings["colours"][(2 if cue_colour == 1 else 1) - 1]
+    elif condition == "incongruent":
+        distractor_colour = settings["colours"][cue_colour - 1]
+        target_colour = settings["colours"][(2 if cue_colour == 1 else 1) - 1]
+    elif condition == "neutral":
+        target_colour, distractor_colour = random.sample(settings["colours"][0:2], 2)
 
     orientations = [
         random.choice([-1, 1]) * random.randint(5, 85),
@@ -34,22 +37,16 @@ def generate_stimuli_characteristics(condition, target_bar):
     ]
 
     if target_bar == "left":
-        target_colour, distractor_colour = stimuli_colours
         target_orientation = orientations[0]
+        stimuli_colours = [target_colour, distractor_colour]
     else:
-        distractor_colour, target_colour = stimuli_colours
         target_orientation = orientations[1]
-
-    if condition == "congruent":
-        capture_colour = target_colour
-    elif condition == "incongruent":
-        capture_colour = distractor_colour
-    elif condition == "neutral":
-        capture_colour = neutral_colour
+        stimuli_colours = [distractor_colour, target_colour]
 
     return {
         "stimuli_colours": stimuli_colours,
-        "capture_colour": capture_colour,
+        "capture_colour": settings["colours"][cue_colour - 1],
+        "capture_colour_id": cue_colour,
         "trial_condition": condition,
         "left_orientation": orientations[0],
         "right_orientation": orientations[1],
@@ -78,7 +75,9 @@ def single_trial(
     target_orientation,
     stimuli_colours,
     capture_colour,
+    capture_colour_id,
     trial_condition,
+    response_type,
     settings,
     testing,
     eyetracker=None,
@@ -103,7 +102,7 @@ def single_trial(
             "capture_cue_onset",
         ),
         (1.25, lambda: create_fixation_dot(settings), None),
-        (None, lambda: create_fixation_dot(settings, target_colour), None),
+        (None, lambda: create_probe_cue_frame(target_colour, settings), None),
     ]
 
     # !!! The timing you pass to do_while_showing is the timing for the previously drawn screen. !!!
@@ -152,7 +151,7 @@ def single_trial(
     sleep(0.25)
 
     return {
-        "condition_code": get_trigger("stimuli_onset", trial_condition, target_bar),
+        "condition_code": get_trigger(response_type, "stimuli_onset", capture_colour_id, trial_condition, target_bar),
         **response,
     }
 

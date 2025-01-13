@@ -51,15 +51,15 @@ class Eyelinker:
 def get_trigger(block_type, frame, cue_colour, condition, target_position):
     # Check input validity
     if (
-        cue_colour == "colour_3"
+        cue_colour == 3
         and condition != "neutral"
-        or cue_colour != "colour_3"
+        or cue_colour != 3
         and condition == "neutral"
     ):
         raise Exception("Invalid combination of cue colour and condition.")
 
     # Determine condition marker
-    condition_marker = {"colour_1": 1, "colour_2": 5, "colour_3": 9}[cue_colour]
+    condition_marker = {1: 1, 2: 5, 3: 9}[cue_colour]
 
     condition_marker = (
         condition_marker + {"congruent": 0, "incongruent": 2, "neutral": 0}[condition]
@@ -68,7 +68,7 @@ def get_trigger(block_type, frame, cue_colour, condition, target_position):
     if target_position == "right":
         condition_marker += 1
 
-    if block_type == "respond not colour_3":
+    if block_type == "respond not 3":
         condition_marker += 10
 
     # Return trigger (frame + condition marker)

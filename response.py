@@ -9,11 +9,9 @@ made by Anna van Harmelen, 2025
 from psychopy import core, visual, event
 from psychopy.hardware.keyboard import Keyboard
 from math import cos, sin, degrees
-from stimuli import create_fixation_dot
+from stimuli import create_fixation_dot, make_circle, RESPONSE_DIAL_SIZE
 from time import time
 from eyetracker import get_trigger
-
-RESPONSE_DIAL_SIZE = 2
 
 
 def turn_handle(pos, dial_step_size):
@@ -59,25 +57,6 @@ def evaluate_response(report_orientation, target_orientation, key):
         "correct_key": correct_key,
         "signed_difference": signed_difference,
     }
-
-
-def make_circle(rad, settings, pos=(0, 0), handle=False):
-    circle = visual.Circle(
-        win=settings["window"],
-        radius=settings["deg2pix"](rad),
-        edges=settings["deg2pix"](1),
-        lineWidth=settings["deg2pix"](0.1),
-        pos=(settings["deg2pix"](pos[0]), settings["deg2pix"](pos[1])),
-    )
-
-    if handle:
-        circle.lineColor = "#eaeaea"
-        circle.fillColor = settings["window"].color
-    else:
-        circle.lineColor = "#d4d4d4"
-        circle.fillColor = None
-
-    return circle
 
 
 def make_dial(settings, colour=None):
@@ -166,7 +145,7 @@ def get_response(
         dial_circle.draw()
         top_dial.draw()
         bottom_dial.draw()
-        create_fixation_dot(settings, target_colour)
+        create_fixation_dot(settings)
 
         window.flip()
 

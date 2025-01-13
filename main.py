@@ -16,7 +16,14 @@ from trial import single_trial, generate_stimuli_characteristics
 from time import time
 from practice import practice
 import datetime as dt
-from block import create_block, block_break, long_break, finish, quick_finish
+from block import (
+    create_blocks,
+    create_block,
+    block_break,
+    long_break,
+    finish,
+    quick_finish,
+)
 
 N_BLOCKS = 16
 TRIALS_PER_BLOCK = 48
@@ -47,7 +54,9 @@ def main():
             "colour_assignment": str,
         },
     )
-    new_participants, colour_assignment = get_participant_details(old_participants, testing)
+    new_participants, colour_assignment = get_participant_details(
+        old_participants, testing
+    )
 
     # Initialise set-up
     settings = get_settings(monitor, directory, colour_assignment)
@@ -77,7 +86,10 @@ def main():
 
     # Start experiment
     try:
-        for block in range(2 if testing else N_BLOCKS):
+        # Generate pseudo-random order of blocks
+        blocks = create_blocks(2 if testing else N_BLOCKS)
+
+        for block_nr, block_type in blocks:
             # Pseudo-randomly create conditions and target locations (so they're weighted)
             block_info = create_block(12 if testing else TRIALS_PER_BLOCK)
 
@@ -87,12 +99,13 @@ def main():
                 start_time = time()
 
                 stimuli_characteristics: dict = generate_stimuli_characteristics(
-                    cue_colour, condition, target_bar
+                    cue_colour, condition, target_bar, settings
                 )
 
                 # Generate trial
                 report: dict = single_trial(
                     **stimuli_characteristics,
+                    response_type=block_type,
                     settings=settings,
                     testing=testing,
                     eyetracker=None if testing else eyelinker,
@@ -103,7 +116,8 @@ def main():
                 data.append(
                     {
                         "trial_number": current_trial,
-                        "block": block + 1,
+                        "block_type": block_type,
+                        "block": block_nr,
                         "start_time": str(
                             dt.timedelta(seconds=(start_time - start_of_experiment))
                         ),
