@@ -79,7 +79,7 @@ def main():
     try:
         for block in range(2 if testing else N_BLOCKS):
             # Pseudo-randomly create conditions and target locations (so they're weighted)
-            block_info = create_block(6 if testing else TRIALS_PER_BLOCK)
+            block_info = create_block(12 if testing else TRIALS_PER_BLOCK)
 
             # Run trials per pseudo-randomly created info
             for cue_colour, condition, target_bar in block_info:
