@@ -12,9 +12,10 @@ ECCENTRICITY = 6
 DOT_SIZE = 0.1  # radius of inner circle
 TOTAL_DOT_SIZE = 0.35  # radius of outer circle
 BAR_SIZE = [0.6, 4]  # width, height
-RESPONSE_DIAL_SIZE = 2 # radius of circle
+RESPONSE_DIAL_SIZE = 2  # radius of circle
 
 decentral_dot = fixation_dot = None
+
 
 def create_fixation_dot(settings, colour="#eaeaea"):
     global decentral_dot, fixation_dot
@@ -67,7 +68,7 @@ def make_one_bar(orientation, colour, position, settings):
 
     return bar_stimulus
 
-    
+
 def make_circle(rad, settings, pos=(0, 0), handle=False, colour=None):
     circle = visual.Circle(
         win=settings["window"],
@@ -95,6 +96,7 @@ def create_stimuli_frame(left_orientation, right_orientation, colours, settings)
 
 def create_capture_cue_frame(colour, settings):
     create_fixation_dot(settings, colour)
+
 
 def create_probe_cue_frame(colour, settings):
     create_fixation_dot(settings)
