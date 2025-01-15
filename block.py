@@ -51,7 +51,8 @@ def create_block(n_trials):
 
 def show_block_type(block_type, colour_assigned, settings, eyetracker):
     show_text(
-        "Next: " f"respond {'NOT ' if block_type == 'respond not 3' else ''}{colour_assigned}",
+        "Next: "
+        f"respond {'NOT ' if block_type == 'respond not 3' else ''}{colour_assigned}",
         settings["window"],
     )
     settings["window"].flip()
@@ -68,10 +69,11 @@ def show_block_type(block_type, colour_assigned, settings, eyetracker):
     return False
 
 
-def block_break(current_block, n_blocks, settings, eyetracker):
+def block_break(current_block, n_blocks, avg_score, settings, eyetracker):
     blocks_left = n_blocks - current_block
 
     show_text(
+        f"You responded correctly to the cue {avg_score}% of the time on the previous block.\n"
         f"You just finished block {current_block}, you {'only ' if blocks_left == 1 else ''}"
         f"have {blocks_left} block{'s' if blocks_left != 1 else ''} left. "
         "Take a break if you want to, but try not to move your head during this break."
@@ -92,8 +94,9 @@ def block_break(current_block, n_blocks, settings, eyetracker):
     return False
 
 
-def long_break(n_blocks, settings, eyetracker):
+def long_break(n_blocks, avg_score, settings, eyetracker):
     show_text(
+        f"You responded correctly to the cue {avg_score}% of the time on the previous block.\n"
         f"You're halfway through! You have {n_blocks // 2} blocks left. "
         "Now is the time to take a longer break. Maybe get up, stretch, walk around."
         "\nPress SPACE whenever you're ready to continue again.",
