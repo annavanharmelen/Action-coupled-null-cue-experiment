@@ -163,18 +163,22 @@ def main():
             # Break after end of block, unless it's the last block.
             # Experimenter can re-calibrate the eyetracker by pressing 'c' here.
             calibrated = True
-            if block + 1 == N_BLOCKS // 2:
+            if block_nr == N_BLOCKS // 2:
                 while calibrated:
                     calibrated = long_break(
-                        N_BLOCKS, settings, eyetracker=None if testing else eyelinker
+                        N_BLOCKS,
+                        avg_score,
+                        settings,
+                        eyetracker=None if testing else eyelinker,
                     )
                 if not testing:
                     eyelinker.start()
-            elif block + 1 < N_BLOCKS:
+            elif block_nr < N_BLOCKS:
                 while calibrated:
                     calibrated = block_break(
-                        block + 1,
+                        block_nr,
                         N_BLOCKS,
+                        avg_score,
                         settings,
                         eyetracker=None if testing else eyelinker,
                     )
