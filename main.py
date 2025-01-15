@@ -155,7 +155,7 @@ def main():
                     }
                 )
                 block_performance.append(report["cue_response"])
-            
+
             # Calculate average performance score for most recent block
             avg_score = round(mean(block_performance) * 100)
 

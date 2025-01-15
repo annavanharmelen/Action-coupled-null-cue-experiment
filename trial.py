@@ -164,7 +164,13 @@ def single_trial(
     sleep(0.25)
 
     return {
-        "condition_code": get_trigger(response_type, "stimuli_onset", capture_colour_id, trial_condition, target_bar),
+        "condition_code": get_trigger(
+            response_type,
+            "stimuli_onset",
+            capture_colour_id,
+            trial_condition,
+            target_bar,
+        ),
         **response,
     }
 
