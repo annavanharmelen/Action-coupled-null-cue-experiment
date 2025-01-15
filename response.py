@@ -34,6 +34,28 @@ def get_report_orientation(key, turns, dial_step_size):
     return report_orientation
 
 
+def evaluate_cue_response(key_list, response_required):
+    # Assume they pressed or didn't press incorrectly
+    cue_response_correct = False
+
+    # Check whether the opposite is true
+    if not key_list and not response_required:
+        cue_response_correct = True  # they shouldn't have pressed and didn't
+    elif "space" in [
+        key[0] for key in key_list
+    ]:  # first check whether anything useful was pressed, otherwise else statement applies
+        for key_press in key_list:
+            if (
+                key_press[0] == "space"
+                and round(key_press[1] * 1000, 2) > -1500
+                and response_required
+            ):
+                cue_response_correct = True  # they should have pressed and did
+                break
+
+    return cue_response_correct
+
+
 def evaluate_response(report_orientation, target_orientation, key):
     report_orientation = round(report_orientation)
 
@@ -80,6 +102,7 @@ def make_dial(settings, colour=None):
 def get_response(
     target_orientation,
     target_colour,
+    response_required,
     settings,
     testing,
     eyetracker,
@@ -95,10 +118,15 @@ def get_response(
 
     # These timing systems should start at the same time, this is almost true
     idle_reaction_time_start = time()
-    keyboard.clock.reset() #this reset ensures that premature key timings are relative to probe onset
+    keyboard.clock.reset()  # this reset ensures that premature key timings are relative to probe onset
 
     # Check if _any_ keys were prematurely pressed
     prematurely_pressed = [(p.name, p.rt) for p in keyboard.getKeys()]
+
+    # Evaluate response to capture cue
+    cue_response_correct = evaluate_cue_response(prematurely_pressed, response_required)
+
+    # Now clear keyboard before next response
     keyboard.clearEvents()
 
     turns = 0
@@ -157,8 +185,7 @@ def get_response(
         "key_pressed": key,
         "turns_made": turns,
         "premature_pressed": True if prematurely_pressed else False,
-        "premature_key": [k[0] for k in prematurely_pressed] if prematurely_pressed else None,
-        "premature_timing": [round(k[1] * 1000, 2) for k in prematurely_pressed] if prematurely_pressed else None,	
+        "cue_response": cue_response_correct,
         **evaluate_response(
             get_report_orientation(key, turns, settings["dial_step_size"]),
             target_orientation,
