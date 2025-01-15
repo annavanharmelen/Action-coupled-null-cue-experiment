@@ -28,14 +28,16 @@ def get_participant_details(existing_participants: pd.DataFrame, testing):
     session = max(existing_participants.session_number) + 1
 
     # Determine colour assignment
-    total_options = 8 * ["red", "green", "blue"]
-
-    for option in total_options:
-        if option in existing_participants.colour_assignment.tolist():
-            total_options.remove(option)
-
-    random.shuffle(total_options)
-    colour_assignment = total_options[0]
+    options = ["red", "green", "blue"]
+    if existing_participants.colour_assignment.tolist()[-1] != "0":
+        colour_index = (
+            options.index(existing_participants.colour_assignment.tolist()[-1]) + 1
+        )
+        if colour_index == 3:
+            colour_index = 0
+        colour_assignment = options[colour_index]
+    else:
+        colour_assignment = options[0]
 
     # Add newly made participant
     new_participant = pd.DataFrame(
