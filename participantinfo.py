@@ -41,7 +41,12 @@ def get_participant_details(existing_participants: pd.DataFrame, testing):
 
     # Add newly made participant
     new_participant = pd.DataFrame(
-        {"age": [age], "participant_number": [participant], "session_number": [session], "colour_assignment": [colour_assignment]}
+        {
+            "age": [age],
+            "participant_number": [participant],
+            "session_number": [session],
+            "colour_assignment": [colour_assignment],
+        }
     )
     all_participants = pd.concat(
         [existing_participants, new_participant], ignore_index=True
