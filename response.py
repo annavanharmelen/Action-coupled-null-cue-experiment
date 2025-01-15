@@ -185,6 +185,14 @@ def get_response(
         "key_pressed": key,
         "turns_made": turns,
         "premature_pressed": True if prematurely_pressed else False,
+        "premature_key": (
+            [k[0] for k in prematurely_pressed] if prematurely_pressed else None
+        ),
+        "premature_timing": (
+            [round(k[1] * 1000, 2) for k in prematurely_pressed]
+            if prematurely_pressed
+            else None
+        ),
         "cue_response": cue_response_correct,
         **evaluate_response(
             get_report_orientation(key, turns, settings["dial_step_size"]),
