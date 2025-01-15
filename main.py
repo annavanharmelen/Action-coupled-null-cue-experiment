@@ -14,6 +14,7 @@ from eyetracker import Eyelinker
 from argparse import ArgumentParser
 from trial import single_trial, generate_stimuli_characteristics
 from time import time
+from numpy import mean
 from practice import practice
 import datetime as dt
 from block import (
@@ -91,6 +92,9 @@ def main():
         blocks = create_blocks(2 if testing else N_BLOCKS)
 
         for block_nr, block_type in blocks:
+            # Create temporary variable for saving block performance
+            block_performance = []
+
             # Pseudo-randomly create conditions and target locations (so they're weighted)
             block_info = create_block(12 if testing else TRIALS_PER_BLOCK)
 
@@ -104,10 +108,21 @@ def main():
                     eyetracker=None if testing else eyelinker,
                 )
 
+            # Clear keyboard cache before starting again
+            settings["keyboard"].clearEvents()
+
             # Run trials per pseudo-randomly created info
             for cue_colour, condition, target_bar in block_info:
                 current_trial += 1
                 start_time = time()
+
+                # Determine response trial or not
+                if block_type == "respond 3" and cue_colour == 3:
+                    response_required = True
+                elif block_type == "respond not 3" and cue_colour != 3:
+                    response_required = True
+                else:
+                    response_required = False
 
                 stimuli_characteristics: dict = generate_stimuli_characteristics(
                     cue_colour, condition, target_bar, settings
@@ -117,6 +132,7 @@ def main():
                 report: dict = single_trial(
                     **stimuli_characteristics,
                     response_type=block_type,
+                    response_required=response_required,
                     settings=settings,
                     testing=testing,
                     eyetracker=None if testing else eyelinker,
@@ -139,6 +155,10 @@ def main():
                         **report,
                     }
                 )
+                block_performance.append(report["cue_response"])
+            
+            # Calculate average performance score for most recent block
+            avg_score = round(mean(block_performance) * 100)
 
             # Break after end of block, unless it's the last block.
             # Experimenter can re-calibrate the eyetracker by pressing 'c' here.

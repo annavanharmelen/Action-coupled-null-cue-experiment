@@ -78,6 +78,7 @@ def single_trial(
     capture_colour_id,
     trial_condition,
     response_type,
+    response_required,
     settings,
     testing,
     eyetracker=None,
@@ -127,6 +128,7 @@ def single_trial(
     response = get_response(
         target_orientation,
         target_colour,
+        response_required,
         settings,
         testing,
         eyetracker,
