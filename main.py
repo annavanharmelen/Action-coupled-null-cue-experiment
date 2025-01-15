@@ -12,7 +12,11 @@ from participantinfo import get_participant_details
 from set_up import get_monitor_and_dir, get_settings
 from eyetracker import Eyelinker
 from argparse import ArgumentParser
-from trial import single_trial, generate_stimuli_characteristics
+from trial import (
+    determine_response_required,
+    generate_stimuli_characteristics,
+    single_trial,
+)
 from time import time
 from numpy import mean
 from practice import practice
@@ -117,12 +121,7 @@ def main():
                 start_time = time()
 
                 # Determine response trial or not
-                if block_type == "respond 3" and cue_colour == 3:
-                    response_required = True
-                elif block_type == "respond not 3" and cue_colour != 3:
-                    response_required = True
-                else:
-                    response_required = False
+                response_required = determine_response_required(block_type, cue_colour)
 
                 stimuli_characteristics: dict = generate_stimuli_characteristics(
                     cue_colour, condition, target_bar, settings

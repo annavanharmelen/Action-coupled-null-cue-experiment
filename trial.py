@@ -56,6 +56,17 @@ def generate_stimuli_characteristics(cue_colour, condition, target_bar, settings
     }
 
 
+def determine_response_required(block_type, cue_colour):
+    if block_type == "respond 3" and cue_colour == 3:
+        response_required = True
+    elif block_type == "respond not 3" and cue_colour != 3:
+        response_required = True
+    else:
+        response_required = False
+
+    return response_required
+
+
 def do_while_showing(waiting_time, something_to_do, window):
     """
     Show whatever is drawn to the screen for exactly `waiting_time` period,
