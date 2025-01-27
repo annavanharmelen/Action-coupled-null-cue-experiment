@@ -40,19 +40,15 @@ def evaluate_cue_response(key_list, response_required):
     cue_response_false_alarm = False
 
     # Check whether the opposite is true
-    if not key_list and not response_required:
-        cue_response_correct = True  # they shouldn't have pressed and didn't
-    elif "space" in [
-        key[0] for key in key_list
-    ]:  # first check whether anything useful was pressed, otherwise else statement applies
-        for key_press in key_list:
-            if (
-                key_press[0] == "space"
-                and round(key_press[1] * 1000, 2) > -1500
-                and response_required
-            ):
-                cue_response_correct = True  # they should have pressed and did
-                break
+    for i, key_press in enumerate(key_list[:-1]):
+        time1 = round(key_press[1] * 1000, 2)
+        time2 = round(key_list[i+1][1] * 1000, 2)
+        if {key_press[0], key_list[i+1][0]} == {"m", "z"} and time1 > -1500 and time2 > -1500:
+            if response_required:
+                cue_response_hit = True # they should have pressed and did
+            else:
+                cue_response_false_alarm = True # they shouldn't have pressed but did            
+            break
 
     return cue_response_hit, cue_response_false_alarm
 
