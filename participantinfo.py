@@ -28,7 +28,7 @@ def get_participant_details(existing_participants: pd.DataFrame, testing):
     session = max(existing_participants.session_number) + 1
 
     # Determine colour assignment
-    options = ["red", "green", "blue"]
+    options = ["orange", "green", "blue"]
     if existing_participants.colour_assignment.tolist()[-1] != "0":
         colour_index = (
             options.index(existing_participants.colour_assignment.tolist()[-1]) + 1

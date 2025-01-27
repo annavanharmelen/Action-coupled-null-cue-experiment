@@ -18,6 +18,6 @@ monitor = {
         }
 
 directory = r"../../Testing/"
-settings = get_settings(monitor, directory, "red")
+settings = get_settings(monitor, directory, "orange")
 
-practice(testing, "red", settings)
+practice(testing, "orange", settings)

@@ -58,7 +58,7 @@ def get_settings(monitor: dict, directory, colour_assignment):
         0.5 * monitor["resolution"][0]
     )
 
-    colour_3 = {"red": COLOURS[2], "blue": COLOURS[0], "green": COLOURS[1]}[
+    colour_3 = {"orange": COLOURS[2], "blue": COLOURS[0], "green": COLOURS[1]}[
         colour_assignment
     ]
     COLOURS.remove(colour_3)
