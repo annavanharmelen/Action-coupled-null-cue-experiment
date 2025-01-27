@@ -52,7 +52,7 @@ def create_block(n_trials):
 def show_block_type(block_type, colour_assigned, settings, eyetracker):
     show_text(
         "Next: "
-        f"respond {'NOT ' if block_type == 'respond not 3' else ''}{colour_assigned}",
+        f"respond when {'NOT ' if block_type == 'respond not 3' else ''}{colour_assigned}",
         settings["window"],
     )
     settings["window"].flip()
