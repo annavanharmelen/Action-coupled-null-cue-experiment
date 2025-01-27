@@ -97,7 +97,8 @@ def main():
 
         for block_nr, block_type in blocks:
             # Create temporary variable for saving block performance
-            block_performance = []
+            block_hit = []
+            block_false_alarm = []
 
             # Pseudo-randomly create conditions and target locations (so they're weighted)
             block_info = create_block(12 if testing else TRIALS_PER_BLOCK)
@@ -154,10 +155,12 @@ def main():
                         **report,
                     }
                 )
-                block_performance.append(report["cue_response"])
+                block_hit.append(report["cue_hit"])
+                block_false_alarm.append(report["cue_false_alarm"])
 
             # Calculate average performance score for most recent block
-            avg_score = round(mean(block_performance) * 100)
+            hits = round(mean(block_hit) * 100)
+            false_alarms = round(mean(block_false_alarm) * 100)
 
             # Break after end of block, unless it's the last block.
             # Experimenter can re-calibrate the eyetracker by pressing 'c' here.
@@ -166,7 +169,8 @@ def main():
                 while calibrated:
                     calibrated = long_break(
                         N_BLOCKS,
-                        avg_score,
+                        hits,
+                        false_alarms,
                         settings,
                         eyetracker=None if testing else eyelinker,
                     )
@@ -177,7 +181,8 @@ def main():
                     calibrated = block_break(
                         block_nr,
                         N_BLOCKS,
-                        avg_score,
+                        hits,
+                        false_alarms,
                         settings,
                         eyetracker=None if testing else eyelinker,
                     )

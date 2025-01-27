@@ -36,7 +36,8 @@ def get_report_orientation(key, turns, dial_step_size):
 
 def evaluate_cue_response(key_list, response_required):
     # Assume they pressed or didn't press incorrectly
-    cue_response_correct = False
+    cue_response_hit = False
+    cue_response_false_alarm = False
 
     # Check whether the opposite is true
     if not key_list and not response_required:
@@ -53,7 +54,7 @@ def evaluate_cue_response(key_list, response_required):
                 cue_response_correct = True  # they should have pressed and did
                 break
 
-    return cue_response_correct
+    return cue_response_hit, cue_response_false_alarm
 
 
 def evaluate_response(report_orientation, target_orientation, key):
@@ -124,7 +125,7 @@ def get_response(
     prematurely_pressed = [(p.name, p.rt) for p in keyboard.getKeys()]
 
     # Evaluate response to capture cue
-    cue_response_correct = evaluate_cue_response(prematurely_pressed, response_required)
+    cue_response_hit, cue_response_false_alarm = evaluate_cue_response(prematurely_pressed, response_required)
 
     # Now clear keyboard before next response
     keyboard.clearEvents()
@@ -194,7 +195,8 @@ def get_response(
             if prematurely_pressed
             else None
         ),
-        "cue_response": cue_response_correct,
+        "cue_hit": cue_response_hit,
+        "cue_false_alarm": cue_response_false_alarm,
         **evaluate_response(
             get_report_orientation(key, turns, settings["dial_step_size"]),
             target_orientation,
