@@ -77,6 +77,10 @@ def main():
         )
         eyelinker.calibrate()
 
+    # Start recording eyetracker
+    if not testing:
+        eyelinker.start()
+    
     # Practice until participant wants to stop
     practice(testing, colour_assignment, settings)
 
