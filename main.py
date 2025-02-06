@@ -90,10 +90,6 @@ def main():
     current_trial = 0
     finished_early = True
 
-    # Start recording eyetracker
-    if not testing:
-        eyelinker.start()
-
     # Start experiment
     try:
         # Generate pseudo-random order of blocks
