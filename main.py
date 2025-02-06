@@ -30,6 +30,7 @@ from block import (
     finish,
     quick_finish,
 )
+import traceback
 
 N_BLOCKS = 16
 TRIALS_PER_BLOCK = 48
@@ -191,6 +192,10 @@ def main():
 
         finished_early = False
 
+    except Exception as e:
+        print(e)
+        print(traceback.format_exc())
+        
     finally:
         # Stop eyetracker (this should also save the data)
         if not testing:
