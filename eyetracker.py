@@ -49,15 +49,6 @@ class Eyelinker:
 
 
 def get_trigger(block_type, frame, cue_colour, condition, target_position, settings):
-    # Check input validity
-    if (
-        cue_colour == 3
-        and condition != "neutral"
-        or cue_colour != 3
-        and condition == "neutral"
-    ):
-        raise Exception("Invalid combination of cue colour and condition.")
-
     # Determine condition marker
     condition_marker = {1: 1, 2: 5, 3: 9}[settings["colours"].index(cue_colour) + 1]
 
@@ -70,6 +61,10 @@ def get_trigger(block_type, frame, cue_colour, condition, target_position, setti
 
     if block_type == "respond not 3":
         condition_marker += 10
+
+    if condition_marker > 20:
+        info = f"Created condition marker ({condition_marker}) doesn't exist. Received: {cue_colour}, {condition}, {target_position}, {block_type}"
+        raise Exception(info)
 
     # Return trigger (frame + condition marker)
     return {
