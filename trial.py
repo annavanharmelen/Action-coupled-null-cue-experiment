@@ -44,6 +44,7 @@ def generate_stimuli_characteristics(cue_colour, condition, target_bar, settings
         stimuli_colours = [distractor_colour, target_colour]
 
     return {
+        "ITI": random.randint(500,800) / 1000,
         "stimuli_colours": stimuli_colours,
         "capture_colour": settings["colours"][cue_colour - 1],
         "capture_colour_id": cue_colour,
@@ -79,6 +80,7 @@ def do_while_showing(waiting_time, something_to_do, window):
 
 
 def single_trial(
+    ITI,
     left_orientation,
     right_orientation,
     target_bar,
@@ -99,7 +101,7 @@ def single_trial(
 
     screens = [
         (0, lambda: 0 / 0, None),  # initial one to make life easier
-        (0.5, lambda: create_fixation_dot(settings), None),
+        (ITI, lambda: create_fixation_dot(settings), None),
         (
             0.25,
             lambda: create_stimuli_frame(
