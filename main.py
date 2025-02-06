@@ -81,7 +81,7 @@ def main():
     # Start recording eyetracker
     if not testing:
         eyelinker.start()
-    
+
     # Practice until participant wants to stop
     practice(testing, colour_assignment, settings)
 
@@ -163,7 +163,9 @@ def main():
 
             # Calculate average performance score for most recent block
             hits = round(mean(block_hit) / mean(block_target_present) * 100)
-            false_alarms = round(mean(block_false_alarm) / (1 - mean(block_target_present)) * 100)
+            false_alarms = round(
+                mean(block_false_alarm) / (1 - mean(block_target_present)) * 100
+            )
 
             # Break after end of block, unless it's the last block.
             # Experimenter can re-calibrate the eyetracker by pressing 'c' here.
@@ -195,7 +197,7 @@ def main():
     except Exception as e:
         print(e)
         print(traceback.format_exc())
-        
+
     finally:
         # Stop eyetracker (this should also save the data)
         if not testing:

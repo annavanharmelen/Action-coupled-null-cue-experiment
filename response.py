@@ -42,12 +42,16 @@ def evaluate_cue_response(key_list, response_required):
     # Check whether the opposite is true
     for i, key_press in enumerate(key_list[:-1]):
         time1 = round(key_press[1] * 1000, 2)
-        time2 = round(key_list[i+1][1] * 1000, 2)
-        if {key_press[0], key_list[i+1][0]} == {"m", "z"} and time1 > -1500 and time2 > -1500:
+        time2 = round(key_list[i + 1][1] * 1000, 2)
+        if (
+            {key_press[0], key_list[i + 1][0]} == {"m", "z"}
+            and time1 > -1500
+            and time2 > -1500
+        ):
             if response_required:
-                cue_response_hit = True # they should have pressed and did
+                cue_response_hit = True  # they should have pressed and did
             else:
-                cue_response_false_alarm = True # they shouldn't have pressed but did            
+                cue_response_false_alarm = True  # they shouldn't have pressed but did
             break
 
     return cue_response_hit, cue_response_false_alarm
@@ -123,7 +127,9 @@ def get_response(
     prematurely_pressed = [(p.name, p.rt) for p in keyboard.getKeys()]
 
     # Evaluate response to capture cue
-    cue_response_hit, cue_response_false_alarm = evaluate_cue_response(prematurely_pressed, response_required)
+    cue_response_hit, cue_response_false_alarm = evaluate_cue_response(
+        prematurely_pressed, response_required
+    )
 
     # Now clear keyboard before next response
     keyboard.clearEvents()
@@ -157,7 +163,14 @@ def get_response(
     dial_circle, top_dial, bottom_dial = make_dial(settings, target_colour)
 
     if not testing and eyetracker:
-        trigger = get_trigger(block_type, "response_onset", capture_colour, trial_condition, target_bar, settings)
+        trigger = get_trigger(
+            block_type,
+            "response_onset",
+            capture_colour,
+            trial_condition,
+            target_bar,
+            settings,
+        )
         eyetracker.tracker.send_message(f"trig{trigger}")
 
     while not keyboard.getKeys(keyList=[key]) and turns < settings["monitor"]["Hz"]:

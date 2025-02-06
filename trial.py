@@ -44,7 +44,7 @@ def generate_stimuli_characteristics(cue_colour, condition, target_bar, settings
         stimuli_colours = [distractor_colour, target_colour]
 
     return {
-        "ITI": random.randint(500,800) / 1000,
+        "ITI": random.randint(500, 800) / 1000,
         "stimuli_colours": stimuli_colours,
         "capture_colour": settings["colours"][cue_colour - 1],
         "capture_colour_id": cue_colour,
@@ -124,7 +124,14 @@ def single_trial(
     for index, (duration, _, frame) in enumerate(screens[:-1]):
         # Send trigger if not testing
         if not testing and frame:
-            trigger = get_trigger(response_type, frame, capture_colour, trial_condition, target_bar, settings)
+            trigger = get_trigger(
+                response_type,
+                frame,
+                capture_colour,
+                trial_condition,
+                target_bar,
+                settings,
+            )
             eyetracker.tracker.send_message(f"trig{trigger}")
 
         # Draw the next screen while showing the current one
@@ -133,7 +140,14 @@ def single_trial(
     # The for loop only draws the probe cue, never shows it
     # So show it here
     if not testing:
-        trigger = get_trigger(response_type, "probe_cue_onset", capture_colour, trial_condition, target_bar, settings)
+        trigger = get_trigger(
+            response_type,
+            "probe_cue_onset",
+            capture_colour,
+            trial_condition,
+            target_bar,
+            settings,
+        )
         eyetracker.tracker.send_message(f"trig{trigger}")
 
     settings["window"].flip()
@@ -152,7 +166,14 @@ def single_trial(
     )
 
     if not testing:
-        trigger = get_trigger(response_type, "response_offset", capture_colour, trial_condition, target_bar, settings)
+        trigger = get_trigger(
+            response_type,
+            "response_offset",
+            capture_colour,
+            trial_condition,
+            target_bar,
+            settings,
+        )
         eyetracker.tracker.send_message(f"trig{trigger}")
 
     # Show performance
@@ -162,7 +183,14 @@ def single_trial(
     )
 
     if not testing:
-        trigger = get_trigger(response_type, "feedback_onset", capture_colour, trial_condition, target_bar, settings)
+        trigger = get_trigger(
+            response_type,
+            "feedback_onset",
+            capture_colour,
+            trial_condition,
+            target_bar,
+            settings,
+        )
         eyetracker.tracker.send_message(f"trig{trigger}")
     settings["window"].flip()
     sleep(0.25)
