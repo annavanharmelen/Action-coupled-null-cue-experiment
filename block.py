@@ -35,9 +35,7 @@ def create_block(n_trials):
     cue_colours = n_trials // 3 * [1] + n_trials // 3 * [2] + n_trials // 3 * [3]
 
     # Generate equal distribution of congruencies,
-    congruencies = n_trials // 6 * (
-        n_trials // 6 * ["congruent"] + n_trials // 6 * ["incongruent"]
-    ) + n_trials // 3 * ["neutral"]
+    congruencies = n_trials // 6 * (2 * ["congruent"] + 2 * ["incongruent"]) + n_trials // 3 * ["neutral"]
 
     # Generate equal distribution of target locations
     target_locations = n_trials // 2 * ["left", "right"]
