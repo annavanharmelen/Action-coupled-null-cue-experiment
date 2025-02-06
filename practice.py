@@ -72,6 +72,8 @@ def practice_dial(testing, settings):
                 None,
                 1,
                 target_bar,
+                None,
+                None,
                 [practice_bar],
             )
 

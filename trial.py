@@ -122,7 +122,7 @@ def single_trial(
     for index, (duration, _, frame) in enumerate(screens[:-1]):
         # Send trigger if not testing
         if not testing and frame:
-            trigger = get_trigger(frame, trial_condition, target_bar)
+            trigger = get_trigger(response_type, frame, capture_colour, trial_condition, target_bar, settings)
             eyetracker.tracker.send_message(f"trig{trigger}")
 
         # Draw the next screen while showing the current one
@@ -131,7 +131,7 @@ def single_trial(
     # The for loop only draws the probe cue, never shows it
     # So show it here
     if not testing:
-        trigger = get_trigger("probe_cue_onset", trial_condition, target_bar)
+        trigger = get_trigger(response_type, "probe_cue_onset", capture_colour, trial_condition, target_bar, settings)
         eyetracker.tracker.send_message(f"trig{trigger}")
 
     settings["window"].flip()
@@ -145,10 +145,12 @@ def single_trial(
         eyetracker,
         trial_condition,
         target_bar,
+        response_type,
+        capture_colour,
     )
 
     if not testing:
-        trigger = get_trigger("response_offset", trial_condition, target_bar)
+        trigger = get_trigger(response_type, "response_offset", capture_colour, trial_condition, target_bar, settings)
         eyetracker.tracker.send_message(f"trig{trigger}")
 
     # Show performance
@@ -158,7 +160,7 @@ def single_trial(
     )
 
     if not testing:
-        trigger = get_trigger("feedback_onset", trial_condition, target_bar)
+        trigger = get_trigger(response_type, "feedback_onset", capture_colour, trial_condition, target_bar, settings)
         eyetracker.tracker.send_message(f"trig{trigger}")
     settings["window"].flip()
     sleep(0.25)
@@ -167,9 +169,10 @@ def single_trial(
         "condition_code": get_trigger(
             response_type,
             "stimuli_onset",
-            capture_colour_id,
+            capture_colour,
             trial_condition,
             target_bar,
+            settings,
         ),
         **response,
     }
