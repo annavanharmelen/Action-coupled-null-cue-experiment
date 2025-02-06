@@ -100,6 +100,7 @@ def practice_indefinitely(block_type, colour_assignment, first_block, settings):
         # Create empty performance list
         hit = []
         false_alarm = []
+        target_present = []
 
         # Show block type
         show_block_type(block_type, colour_assignment, settings, None)
@@ -126,13 +127,14 @@ def practice_indefinitely(block_type, colour_assignment, first_block, settings):
 
             hit.append(report["cue_hit"])
             false_alarm.append(report["cue_false_alarm"])
+            target_present.append(determine_response_required(block_type, cue_colour))
 
     except KeyboardInterrupt:
         if first_block:
             show_text(
                 "You decided to stop practising the first block type."
                 f"\nDuring this practice, your score was:\n"
-                f"Hit: {round(mean(hit) * 100) if hit else 0}% \t False alarm: {round(mean(false_alarm) * 100) if false_alarm else 0}%\n"
+                f"Hit: {round(mean(hit) / mean(target_present) * 100) if hit else 0}% \t False alarm: {round(mean(false_alarm) / (1 - mean(target_present)) * 100) if false_alarm else 0}%\n"
                 "\n\nPress SPACE to start practicing the other block type. "
                 "\n\nRemember to press Q to stop practising these trials once you feel comfortable starting the real experiment.",
                 settings["window"],
@@ -144,8 +146,8 @@ def practice_indefinitely(block_type, colour_assignment, first_block, settings):
             show_text(
                 "You decided to stop practicing the second block type."
                 f"\nDuring this practice, your score was:\n"
-                f"Hit: {round(mean(hit) * 100) if hit else 0}% \t False alarm: {round(mean(false_alarm) * 100) if false_alarm else 0}%\n"
-                "\n\nPress SPACE to start practicing the other block type. "                f"\n\nPress SPACE to start the experiment.",
+                f"Hit: {round(mean(hit) / mean(target_present) * 100) if hit else 0}% \t False alarm: {round(mean(false_alarm) / (1 - mean(target_present)) * 100) if false_alarm else 0}%\n"
+                "\n\nPress SPACE to start the experiment.",
                 settings["window"],
             )
             settings["window"].flip()

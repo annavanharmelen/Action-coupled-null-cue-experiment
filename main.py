@@ -99,6 +99,7 @@ def main():
             # Create temporary variable for saving block performance
             block_hit = []
             block_false_alarm = []
+            block_target_present = []
 
             # Pseudo-randomly create conditions and target locations (so they're weighted)
             block_info = create_block(12 if testing else TRIALS_PER_BLOCK)
@@ -157,10 +158,11 @@ def main():
                 )
                 block_hit.append(report["cue_hit"])
                 block_false_alarm.append(report["cue_false_alarm"])
+                block_target_present.append(response_required)
 
             # Calculate average performance score for most recent block
-            hits = round(mean(block_hit) * 100)
-            false_alarms = round(mean(block_false_alarm) * 100)
+            hits = round(mean(block_hit) / mean(block_target_present) * 100)
+            false_alarms = round(mean(block_false_alarm) / (1 - mean(block_target_present)) * 100)
 
             # Break after end of block, unless it's the last block.
             # Experimenter can re-calibrate the eyetracker by pressing 'c' here.
