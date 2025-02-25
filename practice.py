@@ -41,7 +41,7 @@ def practice(testing, colour_assignment, settings):
 def practice_dial(testing, settings):
     # Show explanation
     show_text(
-        f"Welcome to the practice trials. You will practice each part until you press Q. \
+        f"Welcome to the practice trials. You will practice each part until you feel comfortable. \
             \nPress SPACE to start the practice session.",
         settings["window"],
     )
@@ -88,8 +88,7 @@ def practice_dial(testing, settings):
     except KeyboardInterrupt:
         show_text(
             "You decided to stop practising the response dial."
-            "\nPress SPACE to start practicing full trials."
-            "\n\nRemember to press Q to stop practising these trials once you feel comfortable starting the real experiment.",
+            "\nPress SPACE to start practicing full trials.",
             settings["window"],
         )
         settings["window"].flip()
@@ -139,8 +138,7 @@ def practice_indefinitely(block_type, colour_assignment, first_block, settings):
                 "You decided to stop practising the first block type."
                 f"\nDuring this practice, your score was:\n"
                 f"Hit: {hit_score}% \t False alarm: {false_alarm_score}%\n"
-                "\n\nPress SPACE to start practicing the other block type. "
-                "\n\nRemember to press Q to stop practising these trials once you feel comfortable starting the real experiment.",
+                "\n\nPress SPACE to start practicing the other block type. ",
                 settings["window"],
             )
             settings["window"].flip()
