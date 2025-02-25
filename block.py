@@ -7,7 +7,7 @@ made by Anna van Harmelen, 2025
 """
 
 import random
-from trial import show_text
+from stimuli import show_text
 from response import wait_for_key
 
 

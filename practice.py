@@ -10,9 +10,8 @@ from trial import (
     single_trial,
     generate_stimuli_characteristics,
     determine_response_required,
-    show_text,
 )
-from stimuli import make_one_bar, create_fixation_dot
+from stimuli import make_one_bar, create_fixation_dot, show_text
 from response import get_response, wait_for_key
 from block import show_block_type
 from psychopy import event
@@ -77,7 +76,7 @@ def practice_dial(testing, settings):
                 [practice_bar],
             )
 
-            create_fixation_dot(settings)
+            create_fixation_dot(settings, "practice")
             show_text(
                 f"{report['performance']}",
                 settings["window"],

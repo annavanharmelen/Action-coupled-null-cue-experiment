@@ -186,7 +186,7 @@ def get_response(
         top_dial.draw()
         bottom_dial.draw()
         if not additional_objects:
-            create_fixation_dot(settings)
+            create_fixation_dot(settings, block_type)
 
         window.flip()
 

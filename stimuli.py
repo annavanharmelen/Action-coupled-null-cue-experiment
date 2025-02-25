@@ -17,7 +17,7 @@ RESPONSE_DIAL_SIZE = 2  # radius of circle
 decentral_dot = fixation_dot = None
 
 
-def create_fixation_dot(settings, colour="#eaeaea"):
+def create_fixation_dot(settings, block_type, colour="#eaeaea"):
     global decentral_dot, fixation_dot
 
     # Make fixation dot
@@ -42,6 +42,16 @@ def create_fixation_dot(settings, colour="#eaeaea"):
 
     decentral_dot.draw()
     fixation_dot.draw()
+
+    create_block_info_signal(block_type, settings)
+
+
+def show_text(input, window, pos=(0, 0), colour="#ffffff"):
+    textstim = visual.TextStim(
+        win=window, font="Courier New", text=input, color=colour, pos=pos, height=22
+    )
+
+    textstim.draw()
 
 
 def make_one_bar(orientation, colour, position, settings):
@@ -88,16 +98,34 @@ def make_circle(rad, settings, pos=(0, 0), handle=False, colour=None):
     return circle
 
 
-def create_stimuli_frame(left_orientation, right_orientation, colours, settings):
-    create_fixation_dot(settings)
+def create_stimuli_frame(
+    left_orientation, right_orientation, colours, block_type, settings
+):
+    create_fixation_dot(settings, block_type)
     make_one_bar(left_orientation, colours[0], "left", settings).draw()
     make_one_bar(right_orientation, colours[1], "right", settings).draw()
 
 
-def create_capture_cue_frame(colour, settings):
-    create_fixation_dot(settings, colour)
+def create_capture_cue_frame(colour, block_type, settings):
+    create_fixation_dot(settings, block_type, colour)
 
 
-def create_probe_cue_frame(colour, settings):
-    create_fixation_dot(settings)
+def create_probe_cue_frame(colour, block_type, settings):
+    create_fixation_dot(settings, block_type)
     make_circle(RESPONSE_DIAL_SIZE, settings, colour=colour).draw()
+
+
+def create_block_info_signal(block_type, settings):
+    if block_type == "respond 3":
+        signal = "+"
+    elif block_type == "respond not 3":
+        signal = "-"
+    else:
+        signal = ""
+
+    show_text(
+        signal,
+        settings["window"],
+        pos=(settings["deg2pix"](7), -settings["deg2pix"](7)),
+        colour="#999999",
+    )

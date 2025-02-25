@@ -16,6 +16,7 @@ from stimuli import (
     create_capture_cue_frame,
     create_stimuli_frame,
     create_probe_cue_frame,
+    show_text,
 )
 from eyetracker import get_trigger
 import random
@@ -97,26 +98,34 @@ def single_trial(
     eyetracker=None,
 ):
     # Initial fixation cross to eliminate jitter caused by for loop
-    create_fixation_dot(settings)
+    create_fixation_dot(settings, response_type)
 
     screens = [
         (0, lambda: 0 / 0, None),  # initial one to make life easier
-        (ITI, lambda: create_fixation_dot(settings), None),
+        (ITI, lambda: create_fixation_dot(settings, response_type), None),
         (
             0.25,
             lambda: create_stimuli_frame(
-                left_orientation, right_orientation, stimuli_colours, settings
+                left_orientation,
+                right_orientation,
+                stimuli_colours,
+                response_type,
+                settings,
             ),
             "stimuli_onset",
         ),
-        (0.75, lambda: create_fixation_dot(settings), None),
+        (0.75, lambda: create_fixation_dot(settings, response_type), None),
         (
             0.25,
-            lambda: create_capture_cue_frame(capture_colour, settings),
+            lambda: create_capture_cue_frame(capture_colour, response_type, settings),
             "capture_cue_onset",
         ),
-        (1.25, lambda: create_fixation_dot(settings), None),
-        (None, lambda: create_probe_cue_frame(target_colour, settings), None),
+        (1.25, lambda: create_fixation_dot(settings, response_type), None),
+        (
+            None,
+            lambda: create_probe_cue_frame(target_colour, response_type, settings),
+            None,
+        ),
     ]
 
     # !!! The timing you pass to do_while_showing is the timing for the previously drawn screen. !!!
@@ -177,7 +186,7 @@ def single_trial(
         eyetracker.tracker.send_message(f"trig{trigger}")
 
     # Show performance
-    create_fixation_dot(settings)
+    create_fixation_dot(settings, response_type)
     show_text(
         f"{response['performance']}", settings["window"], (0, settings["deg2pix"](0.7))
     )
@@ -206,11 +215,3 @@ def single_trial(
         ),
         **response,
     }
-
-
-def show_text(input, window, pos=(0, 0), colour="#ffffff"):
-    textstim = visual.TextStim(
-        win=window, font="Courier New", text=input, color=colour, pos=pos, height=22
-    )
-
-    textstim.draw()
