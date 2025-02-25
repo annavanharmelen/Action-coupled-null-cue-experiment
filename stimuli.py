@@ -126,6 +126,6 @@ def create_block_info_signal(block_type, settings):
     show_text(
         signal,
         settings["window"],
-        pos=(settings["deg2pix"](7), -settings["deg2pix"](7)),
+        pos=(settings["deg2pix"](20), -settings["deg2pix"](11)),
         colour="#999999",
     )
