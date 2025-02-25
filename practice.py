@@ -131,11 +131,14 @@ def practice_indefinitely(block_type, colour_assignment, first_block, settings):
             target_present.append(determine_response_required(block_type, cue_colour))
 
     except KeyboardInterrupt:
+        hit_score = round(mean(hit) / mean(target_present) * 100) if len(hit) > 1 else 0
+        false_alarm_score = round(mean(false_alarm) / (1 - mean(target_present)) * 100) if len(false_alarm) > 1 else 0
+
         if first_block:
             show_text(
                 "You decided to stop practising the first block type."
                 f"\nDuring this practice, your score was:\n"
-                f"Hit: {round(mean(hit) / mean(target_present) * 100) if hit else 0}% \t False alarm: {round(mean(false_alarm) / (1 - mean(target_present)) * 100) if false_alarm else 0}%\n"
+                f"Hit: {hit_score}% \t False alarm: {false_alarm_score}%\n"
                 "\n\nPress SPACE to start practicing the other block type. "
                 "\n\nRemember to press Q to stop practising these trials once you feel comfortable starting the real experiment.",
                 settings["window"],
@@ -147,7 +150,7 @@ def practice_indefinitely(block_type, colour_assignment, first_block, settings):
             show_text(
                 "You decided to stop practicing the second block type."
                 f"\nDuring this practice, your score was:\n"
-                f"Hit: {round(mean(hit) / mean(target_present) * 100) if hit else 0}% \t False alarm: {round(mean(false_alarm) / (1 - mean(target_present)) * 100) if false_alarm else 0}%\n"
+                f"Hit: {hit_score}% \t False alarm: {false_alarm_score}%\n"
                 "\n\nPress SPACE to start the experiment.",
                 settings["window"],
             )
