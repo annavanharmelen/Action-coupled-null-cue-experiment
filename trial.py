@@ -40,13 +40,22 @@ def generate_stimuli_characteristics(cue_colour, condition, target_bar, settings
     if target_bar == "left":
         target_orientation = orientations[0]
         stimuli_colours = [target_colour, distractor_colour]
+        stimuli_colour_ids = [
+            settings["colours"].index(target_colour) + 1,
+            settings["colours"].index(distractor_colour) + 1,
+        ]
     else:
         target_orientation = orientations[1]
         stimuli_colours = [distractor_colour, target_colour]
+        stimuli_colour_ids = [
+            settings["colours"].index(distractor_colour) + 1,
+            settings["colours"].index(target_colour) + 1,
+        ]
 
     return {
         "ITI": random.randint(500, 800) / 1000,
         "stimuli_colours": stimuli_colours,
+        "stimuli_colour_ids": stimuli_colour_ids,
         "capture_colour": settings["colours"][cue_colour - 1],
         "capture_colour_id": cue_colour,
         "trial_condition": condition,
@@ -88,6 +97,7 @@ def single_trial(
     target_colour,
     target_orientation,
     stimuli_colours,
+    stimuli_colour_ids,
     capture_colour,
     capture_colour_id,
     trial_condition,

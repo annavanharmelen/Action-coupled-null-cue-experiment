@@ -28,12 +28,12 @@ def get_participant_details(existing_participants: pd.DataFrame, testing):
     session = max(existing_participants.session_number) + 1
 
     # Determine colour assignment
-    options = ["orange", "green", "blue"]
-    if existing_participants.colour_assignment.tolist()[-1] != "0":
+    options = ["pink", "orange", "green", "blue"]
+    if existing_participants.colour_3_assignment.tolist()[-1] != "0":
         colour_index = (
-            options.index(existing_participants.colour_assignment.tolist()[-1]) + 1
+            options.index(existing_participants.colour_3_assignment.tolist()[-1]) + 1
         )
-        if colour_index == 3:
+        if colour_index == 4:
             colour_index = 0
         colour_assignment = options[colour_index]
     else:
@@ -45,7 +45,7 @@ def get_participant_details(existing_participants: pd.DataFrame, testing):
             "age": [age],
             "participant_number": [participant],
             "session_number": [session],
-            "colour_assignment": [colour_assignment],
+            "colour_3_assignment": [colour_assignment],
         }
     )
     all_participants = pd.concat(

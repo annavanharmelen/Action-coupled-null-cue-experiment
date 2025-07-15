@@ -28,16 +28,21 @@ def create_blocks(n_blocks):
 
 
 def create_block(n_trials):
-    if n_trials % 12 != 0:
-        raise Exception("Expected number of trials to be divisible by 12.")
+    if n_trials % 16 != 0:
+        raise Exception("Expected number of trials to be divisible by 16.")
 
     # Generate equal distribution of cue colours
-    cue_colours = n_trials // 3 * [1] + n_trials // 3 * [2] + n_trials // 3 * [3]
+    cue_colours = (
+        n_trials // 4 * [1]
+        + n_trials // 4 * [2]
+        + n_trials // 4 * [3]
+        + n_trials // 4 * [4]
+    )
 
     # Generate equal distribution of congruencies,
-    congruencies = n_trials // 6 * (
+    congruencies = n_trials // 8 * (
         2 * ["congruent"] + 2 * ["incongruent"]
-    ) + n_trials // 3 * ["neutral"]
+    ) + n_trials // 2 * ["neutral"]
 
     # Generate equal distribution of target locations
     target_locations = n_trials // 2 * ["left", "right"]

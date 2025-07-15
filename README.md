@@ -21,7 +21,7 @@ pip install --index-url=https://pypi.sr-support.com sr-research-pylink
 ```
 
 ## Configuration
-To make sure the experiment runs correctly, open the set_up.py file to enter the correct specifications of your monitor and set-up on lines 23-46.
+To make sure the experiment runs correctly, open the set_up.py file to enter the correct specifications of your monitor and set-up on lines 21-44.
 
 ## Running
 The experiment runs in its entirety (including some explanation, practice trials and breaks) if you run `python main.py`.

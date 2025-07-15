@@ -11,10 +11,9 @@ from psychopy.hardware.keyboard import Keyboard
 from math import degrees, atan2, pi
 import random
 
-# COLOURS = blue, pink, green, orange
-# COLOURS = [[19, 146, 206], [217, 103, 241], [101, 148, 14], [238, 104, 60]]
-# COLOURS = blue, green, orange
-COLOURS = [[19, 146, 206], [101, 148, 14], [238, 104, 60]]
+# order of COLOUR_IDS and COLOURS must match
+COLOUR_IDS = ["blue", "pink", "green", "orange"]
+COLOURS = [[19, 146, 206], [217, 103, 241], [101, 148, 14], [238, 104, 60]]
 COLOURS = [
     [(rgb_value / 128 - 1) for rgb_value in rgb_triplet] for rgb_triplet in COLOURS
 ]
@@ -58,11 +57,16 @@ def get_settings(monitor: dict, directory, colour_assignment):
         0.5 * monitor["resolution"][0]
     )
 
-    colour_3 = {"orange": COLOURS[2], "blue": COLOURS[0], "green": COLOURS[1]}[
-        colour_assignment
-    ]
-    COLOURS.remove(colour_3)
-    [colour_1, colour_2] = random.sample(COLOURS, 2)
+    colour_3 = {
+        "orange": COLOURS[3],
+        "blue": COLOURS[0],
+        "green": COLOURS[2],
+        "pink": COLOURS[1],
+    }[colour_assignment]
+    colour_4 = random.choice([c for c in COLOURS if c != colour_3])
+    [colour_1, colour_2] = random.sample(
+        [c for c in COLOURS if c != colour_3 and c != colour_4], 2
+    )
 
     return dict(
         deg2pix=lambda deg: round(deg / degrees_per_pixel),
@@ -73,5 +77,11 @@ def get_settings(monitor: dict, directory, colour_assignment):
         mouse=visual.CustomMouse(win=window, visible=False),
         monitor=monitor,
         directory=directory,
-        colours=[colour_1, colour_2, colour_3],
+        colours=[colour_1, colour_2, colour_3, colour_4],
+        colour_ids=[
+            COLOUR_IDS[COLOURS.index(colour_1)],
+            COLOUR_IDS[COLOURS.index(colour_2)],
+            COLOUR_IDS[COLOURS.index(colour_3)],
+            COLOUR_IDS[COLOURS.index(colour_4)],
+        ],
     )

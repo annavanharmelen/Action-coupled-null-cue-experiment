@@ -106,8 +106,8 @@ def practice_indefinitely(block_type, colour_assignment, first_block, settings):
         show_block_type(block_type, colour_assignment, settings, None)
 
         while True:
-            cue_colour = random.choice([1, 2, 3])
-            if cue_colour == 3:
+            cue_colour = random.choice([1, 2, 3, 4])
+            if cue_colour == 3 or cue_colour == 4:
                 condition = "neutral"
             else:
                 condition = random.choice(["congruent", "incongruent"])
@@ -131,7 +131,11 @@ def practice_indefinitely(block_type, colour_assignment, first_block, settings):
 
     except KeyboardInterrupt:
         hit_score = round(mean(hit) / mean(target_present) * 100) if len(hit) > 1 else 0
-        false_alarm_score = round(mean(false_alarm) / (1 - mean(target_present)) * 100) if len(false_alarm) > 1 else 0
+        false_alarm_score = (
+            round(mean(false_alarm) / (1 - mean(target_present)) * 100)
+            if len(false_alarm) > 1
+            else 0
+        )
 
         if first_block:
             show_text(

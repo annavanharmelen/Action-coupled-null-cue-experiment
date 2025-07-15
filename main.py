@@ -58,6 +58,7 @@ def main():
             "session_number": int,
             "age": int,
             "trials_completed": str,
+            "colour_3_assignment": str,
             "colour_assignment": str,
         },
     )
@@ -65,8 +66,11 @@ def main():
         old_participants, testing
     )
 
-    # Initialise set-up
+    # Initialise set-up and save full colour assignment
     settings = get_settings(monitor, directory, colour_assignment)
+    new_participants.loc[new_participants.index[-1], "colour_assignment"] = str(
+        settings["colour_ids"]
+    )
 
     # Connect to eyetracker and calibrate it
     if not testing:
@@ -103,7 +107,7 @@ def main():
             block_target_present = []
 
             # Pseudo-randomly create conditions and target locations (so they're weighted)
-            block_info = create_block(12 if testing else TRIALS_PER_BLOCK)
+            block_info = create_block(16 if testing else TRIALS_PER_BLOCK)
 
             # Remind participant of block type
             calibrated = True
