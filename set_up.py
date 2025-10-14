@@ -11,9 +11,7 @@ from psychopy.hardware.keyboard import Keyboard
 from math import degrees, atan2, pi
 import random
 
-# COLOURS = blue, pink, green, orange
-# COLOURS = [[19, 146, 206], [217, 103, 241], [101, 148, 14], [238, 104, 60]]
-# COLOURS = blue, green, orange
+COLOUR_IDS = ["blue", "green", "orange"]
 COLOURS = [[19, 146, 206], [101, 148, 14], [238, 104, 60]]
 COLOURS = [
     [(rgb_value / 128 - 1) for rgb_value in rgb_triplet] for rgb_triplet in COLOURS
@@ -74,4 +72,9 @@ def get_settings(monitor: dict, directory, colour_assignment):
         monitor=monitor,
         directory=directory,
         colours=[colour_1, colour_2, colour_3],
+        colour_ids=[
+            COLOUR_IDS[COLOURS.index(colour_1)],
+            COLOUR_IDS[COLOURS.index(colour_2)],
+            COLOUR_IDS[COLOURS.index(colour_3)],
+        ],
     )
