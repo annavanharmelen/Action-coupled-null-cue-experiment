@@ -48,31 +48,45 @@ class Eyelinker:
         self.tracker.close_edf()
 
 
-def get_trigger(block_type, frame, cue_colour, condition, target_position, settings):
+def get_trigger(
+    frame,
+    block_type,
+    congruency,
+    target_colour,
+    target_position,
+    target_orientation,
+):
     # Determine condition marker
-    condition_marker = {1: 1, 2: 5, 3: 9}[settings["colours"].index(cue_colour) + 1]
-
-    condition_marker = (
-        condition_marker + {"congruent": 0, "incongruent": 2, "neutral": 0}[condition]
-    )
-
-    if target_position == "right":
-        condition_marker += 1
+    condition_marker = {
+        "stimuli_onset": 1,
+        "capture_cue_onset": 51,
+        "probe_cue_onset": 101,
+        "response_onset": 151,
+        "response_offset": 201,
+    }[frame]
 
     if block_type == "respond not 3":
-        condition_marker += 10
+        condition_marker += 24
 
-    if condition_marker > 20:
-        info = f"Created condition marker ({condition_marker}) doesn't exist. Received: {cue_colour}, {condition}, {target_position}, {block_type}"
+    condition_marker = (
+        condition_marker + {"congruent": 0, "incongruent": 8, "neutral": 16}[congruency]
+    )
+
+    if target_colour == 2:
+        condition_marker += 4
+
+    if target_position == "right":
+        condition_marker += 2
+
+    if target_orientation == "anticlockwise":
+        condition_marker += 1
+
+    if (
+        (condition_marker + 1) % 50 == 0
+        or condition_marker > 250
+    ):
+        info = f"Created condition marker ({condition_marker}) doesn't exist. Received:  {frame}, {block_type}, {congruency}, {target_colour}, {target_position}, {target_orientation}"
         raise Exception(info)
 
-    # Return trigger (frame + condition marker)
-    return {
-        "stimuli_onset": "1",
-        "capture_cue_onset": "2",
-        "cue_response_onset": "3",
-        "probe_cue_onset": "4",
-        "response_onset": "5",
-        "response_offset": "6",
-        "feedback_onset": "7",
-    }[frame] + str(condition_marker)
+    # Return trigger
+    return condition_marker
