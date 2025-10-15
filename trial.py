@@ -22,46 +22,60 @@ from eyetracker import get_trigger
 import random
 
 
-def generate_stimuli_characteristics(cue_colour, condition, target_bar, settings):
-    if condition == "congruent":
-        target_colour = settings["colours"][cue_colour - 1]
-        distractor_colour = settings["colours"][(2 if cue_colour == 1 else 1) - 1]
-    elif condition == "incongruent":
-        distractor_colour = settings["colours"][cue_colour - 1]
-        target_colour = settings["colours"][(2 if cue_colour == 1 else 1) - 1]
-    elif condition == "neutral":
+def generate_stimuli_characteristics(
+    congruency, target_colour_id, target_location, target_orientation, settings
+):
+    distractor_colour_id = 2 if target_colour_id == 1 else 1
+
+    if congruency == "congruent":
+        target_colour = settings["colours"][target_colour_id - 1]
+        distractor_colour = settings["colours"][distractor_colour_id - 1]
+        cue_colour = target_colour
+        cue_colour_id = target_colour_id
+    elif congruency == "incongruent":
+        target_colour = settings["colours"][target_colour_id - 1]
+        distractor_colour = settings["colours"][distractor_colour_id - 1]
+        cue_colour = distractor_colour
+        cue_colour_id = distractor_colour_id
+    elif congruency == "neutral":
         target_colour, distractor_colour = random.sample(settings["colours"][0:2], 2)
+        cue_colour = settings["colours"][2]
+        cue_colour_id = 3
 
-    orientations = [
-        random.choice([-1, 1]) * random.randint(5, 85),
-        random.choice([-1, 1]) * random.randint(5, 85),
-    ]
+    if target_orientation == "clockwise":
+        target_orientation = random.randint(5, 85)
+        distractor_orientation = random.randint(-5, -85)
+    elif target_orientation == "anticlockwise":
+        target_orientation = random.randint(-5, -85)
+        distractor_orientation = random.randint(5, 85)
 
-    if target_bar == "left":
-        target_orientation = orientations[0]
+    if target_location == "left":
         stimuli_colours = [target_colour, distractor_colour]
+        orientations = [target_orientation, distractor_orientation]
     else:
-        target_orientation = orientations[1]
         stimuli_colours = [distractor_colour, target_colour]
+        orientations = [distractor_orientation, target_orientation]
 
     return {
         "ITI": random.randint(500, 800) / 1000,
+        "trial_condition": congruency,
         "stimuli_colours": stimuli_colours,
-        "capture_colour": settings["colours"][cue_colour - 1],
-        "capture_colour_id": cue_colour,
-        "trial_condition": condition,
+        "orientations": orientations,
         "left_orientation": orientations[0],
         "right_orientation": orientations[1],
-        "target_bar": target_bar,
+        "capture_colour_id": cue_colour_id,
+        "capture_colour": cue_colour,
         "target_colour": target_colour,
+        "target_colour_id": target_colour_id,
+        "target_bar": target_location,
         "target_orientation": target_orientation,
     }
 
 
-def determine_response_required(block_type, cue_colour):
-    if block_type == "respond 3" and cue_colour == 3:
+def determine_response_required(block_type, congruency):
+    if block_type == "respond 3" and congruency == "neutral":
         response_required = True
-    elif block_type == "respond not 3" and cue_colour != 3:
+    elif block_type == "respond not 3" and congruency != "neutral":
         response_required = True
     else:
         response_required = False

@@ -103,7 +103,7 @@ def main():
             block_target_present = []
 
             # Pseudo-randomly create conditions and target locations (so they're weighted)
-            block_info = create_block(12 if testing else TRIALS_PER_BLOCK)
+            trial_info = create_block(24 if testing else TRIALS_PER_BLOCK)
 
             # Remind participant of block type
             calibrated = True
@@ -119,15 +119,15 @@ def main():
             settings["keyboard"].clearEvents()
 
             # Run trials per pseudo-randomly created info
-            for cue_colour, condition, target_bar in block_info:
+            for congruency, target_colour, target_location, target_orientation in trial_info:
                 current_trial += 1
                 start_time = time()
 
                 # Determine response trial or not
-                response_required = determine_response_required(block_type, cue_colour)
+                response_required = determine_response_required(block_type, congruency)
 
                 stimuli_characteristics: dict = generate_stimuli_characteristics(
-                    cue_colour, condition, target_bar, settings
+                    congruency, target_colour, target_location, target_orientation, settings
                 )
 
                 # Generate trial

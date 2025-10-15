@@ -59,8 +59,7 @@ def get_settings(monitor: dict, directory, colour_assignment):
     colour_3 = {"orange": COLOURS[2], "blue": COLOURS[0], "green": COLOURS[1]}[
         colour_assignment
     ]
-    COLOURS.remove(colour_3)
-    [colour_1, colour_2] = random.sample(COLOURS, 2)
+    [colour_1, colour_2] = random.sample([c for c in COLOURS if c != colour_3], 2)
 
     return dict(
         deg2pix=lambda deg: round(deg / degrees_per_pixel),
