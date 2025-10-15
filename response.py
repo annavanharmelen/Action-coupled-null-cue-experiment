@@ -107,6 +107,7 @@ def get_response(
     settings,
     testing,
     eyetracker,
+    eeg,
     trial_condition,
     target_bar,
     block_type,
@@ -163,16 +164,16 @@ def get_response(
     dial_circle, top_dial, bottom_dial = make_dial(settings, target_colour)
 
     if not testing and eyetracker:
-        eyetracker.send_trigger(
-            get_trigger(
-                block_type,
-                "response_onset",
-                capture_colour,
-                trial_condition,
-                target_bar,
-                settings,
-            )
+        trigger = get_trigger(
+            block_type,
+            "response_onset",
+            capture_colour,
+            trial_condition,
+            target_bar,
+            settings,
         )
+        eeg.send_trigger(trigger)
+        eyetracker.send_trigger(trigger)
 
     while not keyboard.getKeys(keyList=[key]) and turns < settings["monitor"]["Hz"]:
         top_dial.pos = turn_handle(top_dial.pos, rad)

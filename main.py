@@ -10,6 +10,7 @@ from psychopy import core
 import pandas as pd
 from participantinfo import get_participant_details
 from set_up import get_monitor_and_dir, get_settings
+from EEG import EEG
 from eyetracker import Eyelinker
 from argparse import ArgumentParser
 from trial import (
@@ -73,6 +74,10 @@ def main():
     new_participants.loc[new_participants.index[-1], "colour_assignment"] = str(
         settings["colour_ids"]
     )
+
+    # Connect to EEG
+    if not testing:
+        eeg = EEG(0x3050)
 
     # Connect to eyetracker and calibrate it
     if not testing:
@@ -144,6 +149,7 @@ def main():
                     settings=settings,
                     testing=testing,
                     eyetracker=None if testing else eyelinker,
+                    eeg=None if testing else eeg,
                 )
                 end_time = time()
 
