@@ -47,6 +47,9 @@ class Eyelinker:
         self.tracker.transfer_edf()
         self.tracker.close_edf()
 
+    def send_trigger(self, trigger):
+        self.tracker.send_message(f"trig{trigger}")
+
 
 def get_trigger(
     frame,

@@ -133,15 +133,16 @@ def single_trial(
     for index, (duration, _, frame) in enumerate(screens[:-1]):
         # Send trigger if not testing
         if not testing and frame:
-            trigger = get_trigger(
-                response_type,
-                frame,
-                capture_colour,
-                trial_condition,
-                target_bar,
-                settings,
+            eyetracker.send_trigger(
+                get_trigger(
+                    response_type,
+                    frame,
+                    capture_colour,
+                    trial_condition,
+                    target_bar,
+                    settings,
+                )
             )
-            eyetracker.tracker.send_message(f"trig{trigger}")
 
         # Draw the next screen while showing the current one
         do_while_showing(duration, screens[index + 1][1], settings["window"])
@@ -149,15 +150,16 @@ def single_trial(
     # The for loop only draws the probe cue, never shows it
     # So show it here
     if not testing:
-        trigger = get_trigger(
-            response_type,
-            "probe_cue_onset",
-            capture_colour,
-            trial_condition,
-            target_bar,
-            settings,
+        eyetracker.send_trigger(
+            get_trigger(
+                response_type,
+                "probe_cue_onset",
+                capture_colour,
+                trial_condition,
+                target_bar,
+                settings,
+            )
         )
-        eyetracker.tracker.send_message(f"trig{trigger}")
 
     settings["window"].flip()
 
@@ -175,15 +177,16 @@ def single_trial(
     )
 
     if not testing:
-        trigger = get_trigger(
-            response_type,
-            "response_offset",
-            capture_colour,
-            trial_condition,
-            target_bar,
-            settings,
+        eyetracker.send_trigger(
+            get_trigger(
+                response_type,
+                "response_offset",
+                capture_colour,
+                trial_condition,
+                target_bar,
+                settings,
+            )
         )
-        eyetracker.tracker.send_message(f"trig{trigger}")
 
     # Show performance
     create_fixation_dot(settings, response_type)
@@ -192,15 +195,16 @@ def single_trial(
     )
 
     if not testing:
-        trigger = get_trigger(
-            response_type,
-            "feedback_onset",
-            capture_colour,
-            trial_condition,
-            target_bar,
-            settings,
+        eyetracker.send_trigger(
+            get_trigger(
+                response_type,
+                "feedback_onset",
+                capture_colour,
+                trial_condition,
+                target_bar,
+                settings,
+            )
         )
-        eyetracker.tracker.send_message(f"trig{trigger}")
     settings["window"].flip()
     sleep(0.25)
 
