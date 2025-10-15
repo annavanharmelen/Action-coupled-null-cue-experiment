@@ -58,6 +58,7 @@ def main():
             "session_number": int,
             "age": int,
             "trials_completed": str,
+            "colour_3_assignment": str,
             "colour_assignment": str,
         },
     )
@@ -67,6 +68,11 @@ def main():
 
     # Initialise set-up
     settings = get_settings(monitor, directory, colour_assignment)
+
+    # Save full colour assignment
+    new_participants.loc[new_participants.index[-1], "colour_assignment"] = str(
+        settings["colour_ids"]
+    )
 
     # Connect to eyetracker and calibrate it
     if not testing:
