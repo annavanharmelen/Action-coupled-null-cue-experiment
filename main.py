@@ -12,7 +12,7 @@ from participantinfo import get_participant_details
 from set_up import get_monitor_and_dir, get_settings
 from EEG import EEG
 from eyetracker import Eyelinker
-from argparse import ArgumentParser
+from stimuli import initialise_all_stimuli
 from trial import (
     determine_response_required,
     generate_stimuli_characteristics,
@@ -95,8 +95,11 @@ def main():
     if not testing:
         eyelinker.start()
 
+    # Initialise stimuli
+    stimuli = initialise_all_stimuli(settings)
+
     # Practice until participant wants to stop
-    practice(testing, colour_assignment, settings)
+    practice(testing, stimuli, colour_assignment, settings)
 
     # Initialise some stuff
     start_of_experiment = time()
@@ -146,8 +149,9 @@ def main():
                 # Generate trial
                 report: dict = single_trial(
                     **stimuli_characteristics,
-                    response_type=block_type,
+                    block_type=block_type,
                     response_required=response_required,
+                    stimuli=stimuli,
                     settings=settings,
                     testing=testing,
                     eyetracker=None if testing else eyelinker,

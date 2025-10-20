@@ -14,36 +14,105 @@ TOTAL_DOT_SIZE = 0.35  # radius of outer circle
 BAR_SIZE = [0.6, 4]  # width, height
 RESPONSE_DIAL_SIZE = 2  # radius of circle
 
-decentral_dot = fixation_dot = None
+
+def initialise_all_stimuli(settings):
+    # Create fixation dot
+    decentral_dot = visual.Circle(
+        win=settings["window"],
+        units="pix",
+        radius=settings["deg2pix"](TOTAL_DOT_SIZE),
+        pos=(0, 0),
+        fillColor="#eaeaea",
+    )
+
+    fixation_dot = visual.Circle(
+        win=settings["window"],
+        units="pix",
+        radius=settings["deg2pix"](DOT_SIZE),
+        pos=(0, 0),
+        fillColor="#000000",
+    )
+
+    # Create block info signal
+    respond_3_signal = visual.TextStim(
+        win=settings["window"],
+        font="Courier New",
+        text="+",
+        color="#ffffff",
+        pos=(settings["deg2pix"](20), -settings["deg2pix"](11)),
+        height=22,
+    )
+
+    respond_not_3_signal = visual.TextStim(
+        win=settings["window"],
+        font="Courier New",
+        text="-",
+        color="#ffffff",
+        pos=(settings["deg2pix"](20), -settings["deg2pix"](11)),
+        height=22,
+    )
+
+    # Create main stimulus
+    bar_stimulus = visual.Rect(
+        win=settings["window"],
+        units="pix",
+        width=settings["deg2pix"](BAR_SIZE[0]),
+        height=settings["deg2pix"](BAR_SIZE[1]),
+        pos=(0, 0),
+    )
+
+    # Create main probe
+    probe = visual.Circle(
+        win=settings["window"],
+        radius=settings["deg2pix"](RESPONSE_DIAL_SIZE),
+        lineWidth=settings["deg2pix"](0.1),
+        fillColor=None,
+    )
+
+    # Create probe handles
+    top_handle = visual.Circle(
+        win=settings["window"],
+        radius=settings["deg2pix"](RESPONSE_DIAL_SIZE / 15),
+        lineWidth=settings["deg2pix"](0.1),
+        pos=(0, 0),
+        lineColor="#eaeaea",
+        fillColor=settings["window"].color,
+    )
+
+    bottom_handle = visual.Circle(
+        win=settings["window"],
+        radius=settings["deg2pix"](RESPONSE_DIAL_SIZE / 15),
+        lineWidth=settings["deg2pix"](0.1),
+        pos=(0, 0),
+        lineColor="#eaeaea",
+        fillColor=settings["window"].color,
+    )
+
+    return {
+        "fixation_dot": {"decentral_dot": decentral_dot, "fixation_dot": fixation_dot},
+        "block_info_signal": {
+            "respond 3": respond_3_signal,
+            "respond not 3": respond_not_3_signal,
+        },
+        "bar": bar_stimulus,
+        "probe_circle": probe,
+        "top_handle": top_handle,
+        "bottom_handle": bottom_handle,
+    }
 
 
-def create_fixation_dot(settings, block_type, colour="#eaeaea"):
-    global decentral_dot, fixation_dot
+def draw_fixation_dot(dot_items, block_info, block_type, colour="#eaeaea"):
 
-    # Make fixation dot
-    if decentral_dot is None:
-        decentral_dot = visual.Circle(
-            win=settings["window"],
-            units="pix",
-            radius=settings["deg2pix"](TOTAL_DOT_SIZE),
-            pos=(0, 0),
-            fillColor=colour,
-        )
-    decentral_dot.fillColor = colour
+    # Set colour
+    dot_items["decentral_dot"].fillColor = colour
 
-    if fixation_dot is None:
-        fixation_dot = visual.Circle(
-            win=settings["window"],
-            units="pix",
-            radius=settings["deg2pix"](DOT_SIZE),
-            pos=(0, 0),
-            fillColor="#000000",
-        )
+    # Draw both components
+    dot_items["decentral_dot"].draw()
+    dot_items["fixation_dot"].draw()
 
-    decentral_dot.draw()
-    fixation_dot.draw()
-
-    create_block_info_signal(block_type, settings)
+    # Show this if there is something to show
+    if block_info is not None and block_type is not None:
+        block_info[block_type].draw()
 
 
 def show_text(input, window, pos=(0, 0), colour="#ffffff"):
@@ -54,7 +123,7 @@ def show_text(input, window, pos=(0, 0), colour="#ffffff"):
     textstim.draw()
 
 
-def make_one_bar(orientation, colour, position, settings):
+def draw_one_bar(item, orientation, colour, position, settings):
     # Check input
     if position == "left":
         pos = (-settings["deg2pix"](ECCENTRICITY), 0)
@@ -65,67 +134,34 @@ def make_one_bar(orientation, colour, position, settings):
     else:
         raise Exception(f"Expected 'left' or 'right', but received {position!r}. :(")
 
-    # Create bar stimulus
-    bar_stimulus = visual.Rect(
-        win=settings["window"],
-        units="pix",
-        width=settings["deg2pix"](BAR_SIZE[0]),
-        height=settings["deg2pix"](BAR_SIZE[1]),
-        pos=pos,
-        ori=orientation,
-        fillColor=colour,
-    )
-
-    return bar_stimulus
+    # Draw stimulus
+    item.pos = pos
+    item.ori = orientation
+    item.setColor(colour)
+    item.draw()
 
 
-def make_circle(rad, settings, pos=(0, 0), handle=False, colour=None):
-    circle = visual.Circle(
-        win=settings["window"],
-        radius=settings["deg2pix"](rad),
-        edges=settings["deg2pix"](1),
-        lineWidth=settings["deg2pix"](0.1),
-        pos=(settings["deg2pix"](pos[0]), settings["deg2pix"](pos[1])),
-    )
+def draw_circle(item, pos=(0, 0), colour="#d4d4d4"):
+    item.lineColor = colour
+    item.pos = pos
 
-    if handle:
-        circle.lineColor = "#eaeaea"
-        circle.fillColor = settings["window"].color
-    else:
-        circle.lineColor = colour if colour else "#d4d4d4"
-        circle.fillColor = None
-
-    return circle
+    item.draw()
 
 
 def create_stimuli_frame(
-    left_orientation, right_orientation, colours, block_type, settings
+    stimuli, left_orientation, right_orientation, colours, block_type, settings
 ):
-    create_fixation_dot(settings, block_type)
-    make_one_bar(left_orientation, colours[0], "left", settings).draw()
-    make_one_bar(right_orientation, colours[1], "right", settings).draw()
+    draw_fixation_dot(stimuli["fixation_dot"], stimuli["block_info_signal"], block_type)
+    draw_one_bar(stimuli["bar"], left_orientation, colours[0], "left", settings)
+    draw_one_bar(stimuli["bar"], right_orientation, colours[1], "right", settings)
 
 
-def create_capture_cue_frame(colour, block_type, settings):
-    create_fixation_dot(settings, block_type, colour)
-
-
-def create_probe_cue_frame(colour, block_type, settings):
-    create_fixation_dot(settings, block_type)
-    make_circle(RESPONSE_DIAL_SIZE, settings, colour=colour).draw()
-
-
-def create_block_info_signal(block_type, settings):
-    if block_type == "respond 3":
-        signal = "+"
-    elif block_type == "respond not 3":
-        signal = "-"
-    else:
-        signal = ""
-
-    show_text(
-        signal,
-        settings["window"],
-        pos=(settings["deg2pix"](20), -settings["deg2pix"](11)),
-        colour="#999999",
+def create_capture_cue_frame(stimuli, colour, block_type):
+    draw_fixation_dot(
+        stimuli["fixation_dot"], stimuli["block_info_signal"], block_type, colour
     )
+
+
+def create_probe_cue_frame(stimuli, colour, block_type):
+    draw_fixation_dot(stimuli["fixation_dot"], stimuli["block_info_signal"], block_type)
+    draw_circle(stimuli["probe_circle"], colour=colour)

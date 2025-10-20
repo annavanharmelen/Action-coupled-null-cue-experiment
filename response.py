@@ -9,7 +9,7 @@ made by Anna van Harmelen, 2025
 from psychopy import core, visual, event
 from psychopy.hardware.keyboard import Keyboard
 from math import cos, sin, degrees
-from stimuli import create_fixation_dot, make_circle, RESPONSE_DIAL_SIZE
+from stimuli import draw_fixation_dot, draw_circle, RESPONSE_DIAL_SIZE
 from time import time
 from eyetracker import get_trigger
 
@@ -82,25 +82,14 @@ def evaluate_response(report_orientation, target_orientation, key):
     }
 
 
-def make_dial(settings, colour=None):
-    dial_circle = make_circle(RESPONSE_DIAL_SIZE, settings, colour=colour)
-    top_dial = make_circle(
-        RESPONSE_DIAL_SIZE / 15,
-        settings,
-        pos=(0, RESPONSE_DIAL_SIZE),
-        handle=True,
-    )
-    bottom_dial = make_circle(
-        RESPONSE_DIAL_SIZE / 15,
-        settings,
-        pos=(0, -RESPONSE_DIAL_SIZE),
-        handle=True,
-    )
-
-    return dial_circle, top_dial, bottom_dial
+def draw_dial(stimuli, colour, settings):
+    draw_circle(stimuli["probe_circle"], colour=colour)
+    draw_circle(stimuli["top_handle"], pos=(settings["deg2pix"](0), settings["deg2pix"](RESPONSE_DIAL_SIZE)))
+    draw_circle(stimuli["bottom_handle"], pos=(settings["deg2pix"](0), settings["deg2pix"](-RESPONSE_DIAL_SIZE)))
 
 
 def get_response(
+    stimuli,
     target_orientation,
     target_colour,
     response_required,
@@ -157,11 +146,7 @@ def get_response(
     if "q" in pressed:
         raise KeyboardInterrupt()
 
-    # Stop rotating the moment either of the following happens:
-    # - the participant released the rotation key
-    # - a second passed
-
-    dial_circle, top_dial, bottom_dial = make_dial(settings, target_colour)
+    draw_dial(stimuli, target_colour, settings)
 
     if not testing and eyetracker:
         trigger = get_trigger(
@@ -175,21 +160,26 @@ def get_response(
         eeg.send_trigger(trigger)
         eyetracker.send_trigger(trigger)
 
+    # Stop rotating the moment either of the following happens:
+    # - the participant released the rotation key
+    # - a second passed
     while not keyboard.getKeys(keyList=[key]) and turns < settings["monitor"]["Hz"]:
-        top_dial.pos = turn_handle(top_dial.pos, rad)
-        bottom_dial.pos = turn_handle(bottom_dial.pos, rad)
-
         turns += 1
+
+        stimuli["top_handle"].pos = turn_handle(stimuli["top_handle"].pos, rad)
+        stimuli["bottom_handle"].pos = turn_handle(stimuli["bottom_handle"].pos, rad)
 
         for item in additional_objects:
             item.draw()
 
-        dial_circle.draw()
-        top_dial.draw()
-        bottom_dial.draw()
         if not additional_objects:
-            create_fixation_dot(settings, block_type)
+            draw_fixation_dot(
+                stimuli["fixation_dot"], stimuli["block_info_signal"], block_type
+            )
 
+        stimuli["probe_circle"].draw()
+        stimuli["top_handle"].draw()
+        stimuli["bottom_handle"].draw()
         window.flip()
 
     response_time = time() - response_started

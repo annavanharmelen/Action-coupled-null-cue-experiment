@@ -11,7 +11,7 @@ from trial import (
     generate_stimuli_characteristics,
     determine_response_required,
 )
-from stimuli import make_one_bar, create_fixation_dot, show_text
+from stimuli import draw_one_bar, draw_fixation_dot, show_text
 from response import get_response, wait_for_key
 from block import show_block_type
 from psychopy import event
@@ -25,20 +25,20 @@ from numpy import mean
 # 3. Practice full trials - block type 2
 
 
-def practice(testing, colour_assignment, settings):
+def practice(testing, stimuli, colour_assignment, settings):
     # Practice response dial
-    practice_dial(testing, settings)
+    practice_dial(testing, stimuli, settings)
 
     # Decide which type of block to practice first
     block_types = ["respond 3", "respond not 3"]
     random.shuffle(block_types)
 
     # Practice separate block types (random order)
-    practice_indefinitely(block_types[0], colour_assignment, True, settings)
-    practice_indefinitely(block_types[1], colour_assignment, False, settings)
+    practice_indefinitely(block_types[0], stimuli, colour_assignment, True, settings)
+    practice_indefinitely(block_types[1], stimuli, colour_assignment, False, settings)
 
 
-def practice_dial(testing, settings):
+def practice_dial(testing, stimuli, settings):
     # Show explanation
     show_text(
         f"Welcome to the practice trials. You will practice each part until you feel comfortable. \
@@ -50,33 +50,37 @@ def practice_dial(testing, settings):
 
     # Practice dial until user chooses to stop
     try:
+        # Ensure stimulus looks as it should
+        stimuli["bar"].pos = (0, 0)
+        stimuli["bar"].setColor("#eaeaea")
+         
         while True:
+            target_orientation = random.choice(["clockwise", "anticlockwise"])
             target_bar = "left"
             target = generate_stimuli_characteristics(
-                3, "neutral", target_bar, settings
+                "neutral", 3, target_bar, target_orientation, settings
             )
-            target_orientation = target["target_orientation"]
-            target_colour = None
 
-            practice_bar = make_one_bar(
-                target_orientation, "#eaeaea", "middle", settings
-            )
+            # Change orientation of stimulus each iteration
+            stimuli["bar"].ori = target["target_orientation"]
 
             report: dict = get_response(
-                target_orientation,
-                target_colour,
+                stimuli,
+                target["target_orientation"],
+                "#d4d4d4",
                 False,
                 settings,
                 testing,
+                None,
                 None,
                 1,
                 target_bar,
                 None,
                 None,
-                [practice_bar],
+                [stimuli["bar"]],
             )
 
-            create_fixation_dot(settings, "practice")
+            draw_fixation_dot(stimuli["fixation_dot"], None, None)
             show_text(
                 f"{report['performance']}",
                 settings["window"],
@@ -95,7 +99,9 @@ def practice_dial(testing, settings):
         wait_for_key(["space"], settings["keyboard"])
 
 
-def practice_indefinitely(block_type, colour_assignment, first_block, settings):
+def practice_indefinitely(
+    block_type, stimuli, colour_assignment, first_block, settings
+):
     try:
         # Create empty performance list
         hit = []
@@ -106,6 +112,8 @@ def practice_indefinitely(block_type, colour_assignment, first_block, settings):
         show_block_type(block_type, colour_assignment, settings, None)
 
         while True:
+            target_orientation = random.choice(["clockwise", "anticlockwise"])
+
             cue_colour = random.choice([1, 2, 3])
             if cue_colour == 3:
                 condition = "neutral"
@@ -114,13 +122,14 @@ def practice_indefinitely(block_type, colour_assignment, first_block, settings):
             target_bar = random.choice(["left", "right"])
 
             stimulus = generate_stimuli_characteristics(
-                cue_colour, condition, target_bar, settings
+                condition, cue_colour, target_bar, target_orientation, settings
             )
 
             report: dict = single_trial(
                 **stimulus,
-                response_type=block_type,
+                block_type=block_type,
                 response_required=determine_response_required(block_type, cue_colour),
+                stimuli=stimuli,
                 settings=settings,
                 testing=True,
             )
@@ -130,8 +139,13 @@ def practice_indefinitely(block_type, colour_assignment, first_block, settings):
             target_present.append(determine_response_required(block_type, cue_colour))
 
     except KeyboardInterrupt:
+
         hit_score = round(mean(hit) / mean(target_present) * 100) if len(hit) > 1 else 0
-        false_alarm_score = round(mean(false_alarm) / (1 - mean(target_present)) * 100) if len(false_alarm) > 1 else 0
+        false_alarm_score = (
+            round(mean(false_alarm) / (1 - mean(target_present)) * 100)
+            if len(false_alarm) > 1
+            else 0
+        )
 
         if first_block:
             show_text(

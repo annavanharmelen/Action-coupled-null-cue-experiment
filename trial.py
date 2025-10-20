@@ -12,7 +12,7 @@ from psychopy.core import wait
 from time import time, sleep
 from response import get_response
 from stimuli import (
-    create_fixation_dot,
+    draw_fixation_dot,
     create_capture_cue_frame,
     create_stimuli_frame,
     create_probe_cue_frame,
@@ -107,38 +107,58 @@ def single_trial(
     trial_condition,
     response_type,
     response_required,
+    stimuli,
     settings,
     testing,
     eyetracker=None,
     eeg=None,
 ):
     # Initial fixation cross to eliminate jitter caused by for loop
-    create_fixation_dot(settings, response_type)
+    draw_fixation_dot(stimuli["fixation_dot"], stimuli["block_info_signal"], block_type)
 
     screens = [
         (0, lambda: 0 / 0, None),  # initial one to make life easier
-        (ITI, lambda: create_fixation_dot(settings, response_type), None),
+        (
+            ITI,
+            lambda: draw_fixation_dot(
+                stimuli["fixation_dot"], stimuli["block_info_signal"], block_type
+            ),
+            None,
+        ),
         (
             0.25,
             lambda: create_stimuli_frame(
+                stimuli,
                 left_orientation,
                 right_orientation,
                 stimuli_colours,
-                response_type,
+                block_type,
                 settings,
             ),
             "stimuli_onset",
         ),
-        (0.75, lambda: create_fixation_dot(settings, response_type), None),
+        (
+            0.75,
+            lambda: draw_fixation_dot(
+                stimuli["fixation_dot"], stimuli["block_info_signal"], block_type
+            ),
+            None,
+        ),
         (
             0.25,
-            lambda: create_capture_cue_frame(capture_colour, response_type, settings),
+            lambda: create_capture_cue_frame(stimuli, capture_colour, block_type),
             "capture_cue_onset",
         ),
-        (1.25, lambda: create_fixation_dot(settings, response_type), None),
+        (
+            1.25,
+            lambda: draw_fixation_dot(
+                stimuli["fixation_dot"], stimuli["block_info_signal"], block_type
+            ),
+            None,
+        ),
         (
             None,
-            lambda: create_probe_cue_frame(target_colour, response_type, settings),
+            lambda: create_probe_cue_frame(stimuli, target_colour, block_type),
             None,
         ),
     ]
@@ -179,6 +199,7 @@ def single_trial(
     settings["window"].flip()
 
     response = get_response(
+        stimuli,
         target_orientation,
         target_colour,
         response_required,
@@ -188,7 +209,7 @@ def single_trial(
         eeg,
         trial_condition,
         target_bar,
-        response_type,
+        block_type,
         capture_colour,
     )
 
@@ -205,7 +226,7 @@ def single_trial(
         eyetracker.send_trigger(trigger)
 
     # Show performance
-    create_fixation_dot(settings, response_type)
+    draw_fixation_dot(stimuli["fixation_dot"], stimuli["block_info_signal"], block_type)
     show_text(
         f"{response['performance']}", settings["window"], (0, settings["deg2pix"](0.7))
     )
