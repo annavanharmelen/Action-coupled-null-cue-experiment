@@ -44,9 +44,9 @@ def generate_stimuli_characteristics(
 
     if target_orientation == "clockwise":
         target_orientation = random.randint(5, 85)
-        distractor_orientation = random.randint(-5, -85)
+        distractor_orientation = random.randint(-85, -5)
     elif target_orientation == "anticlockwise":
-        target_orientation = random.randint(-5, -85)
+        target_orientation = random.randint(-85, -5)
         distractor_orientation = random.randint(5, 85)
 
     if target_location == "left":
