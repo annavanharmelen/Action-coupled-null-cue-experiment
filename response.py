@@ -92,6 +92,7 @@ def get_response(
     stimuli,
     target_orientation,
     target_colour,
+    target_colour_id,
     response_required,
     settings,
     testing,
@@ -150,12 +151,12 @@ def get_response(
 
     if not testing and eyetracker:
         trigger = get_trigger(
-            block_type,
             "response_onset",
-            capture_colour,
+            block_type,
             trial_condition,
+            target_colour_id,
             target_bar,
-            settings,
+            target_orientation,
         )
         eeg.send_trigger(trigger)
         eyetracker.send_trigger(trigger)

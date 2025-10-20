@@ -68,6 +68,7 @@ def practice_dial(testing, stimuli, settings):
                 stimuli,
                 target["target_orientation"],
                 "#d4d4d4",
+                0,
                 False,
                 settings,
                 testing,

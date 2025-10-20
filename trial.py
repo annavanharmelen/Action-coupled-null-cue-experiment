@@ -171,12 +171,12 @@ def single_trial(
         # Send trigger if not testing
         if not testing and frame:
             trigger = get_trigger(
-                response_type,
                 frame,
-                capture_colour,
+                block_type,
                 trial_condition,
+                target_colour_id,
                 target_bar,
-                settings,
+                target_orientation,
             )
             eeg.send_trigger(trigger)
             eyetracker.send_trigger(trigger)
@@ -188,12 +188,12 @@ def single_trial(
     # So show it here
     if not testing:
         trigger = get_trigger(
-            response_type,
             "probe_cue_onset",
-            capture_colour,
+            block_type,
             trial_condition,
+            target_colour_id,
             target_bar,
-            settings,
+            target_orientation,
         )
         eeg.send_trigger(trigger)
         eyetracker.send_trigger(trigger)
@@ -204,6 +204,7 @@ def single_trial(
         stimuli,
         target_orientation,
         target_colour,
+        target_colour_id,
         response_required,
         settings,
         testing,
@@ -217,12 +218,12 @@ def single_trial(
 
     if not testing:
         trigger = get_trigger(
-            response_type,
             "response_offset",
-            capture_colour,
+            block_type,
             trial_condition,
+            target_colour_id,
             target_bar,
-            settings,
+            target_orientation,
         )
         eeg.send_trigger(trigger)
         eyetracker.send_trigger(trigger)
@@ -237,12 +238,12 @@ def single_trial(
 
     return {
         "condition_code": get_trigger(
-            response_type,
             "stimuli_onset",
-            capture_colour,
+            block_type,
             trial_condition,
+            target_colour_id,
             target_bar,
-            settings,
+            target_orientation,
         ),
         **response,
     }
