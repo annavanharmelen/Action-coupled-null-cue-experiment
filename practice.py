@@ -53,7 +53,7 @@ def practice_dial(testing, stimuli, settings):
         # Ensure stimulus looks as it should
         stimuli["bar"].pos = (0, 0)
         stimuli["bar"].setColor("#eaeaea")
-         
+
         while True:
             target_orientation = random.choice(["clockwise", "anticlockwise"])
             target_bar = "left"

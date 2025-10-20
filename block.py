@@ -50,7 +50,9 @@ def create_block(n_trials):
     target_orientations = n_trials // 2 * ["clockwise", "anticlockwise"]
 
     # Create trial parameters for all trials
-    trials = list(zip(congruencies, target_colours, target_locations, target_orientations))
+    trials = list(
+        zip(congruencies, target_colours, target_locations, target_orientations)
+    )
     random.shuffle(trials)
 
     return trials

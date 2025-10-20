@@ -136,7 +136,12 @@ def main():
             settings["keyboard"].clearEvents()
 
             # Run trials per pseudo-randomly created info
-            for congruency, target_colour, target_location, target_orientation in trial_info:
+            for (
+                congruency,
+                target_colour,
+                target_location,
+                target_orientation,
+            ) in trial_info:
                 current_trial += 1
                 start_time = time()
 
@@ -144,7 +149,11 @@ def main():
                 response_required = determine_response_required(block_type, congruency)
 
                 stimuli_characteristics: dict = generate_stimuli_characteristics(
-                    congruency, target_colour, target_location, target_orientation, settings
+                    congruency,
+                    target_colour,
+                    target_location,
+                    target_orientation,
+                    settings,
                 )
 
                 # Generate trial

@@ -84,8 +84,14 @@ def evaluate_response(report_orientation, target_orientation, key):
 
 def draw_dial(stimuli, colour, settings):
     draw_circle(stimuli["probe_circle"], colour=colour)
-    draw_circle(stimuli["top_handle"], pos=(settings["deg2pix"](0), settings["deg2pix"](RESPONSE_DIAL_SIZE)))
-    draw_circle(stimuli["bottom_handle"], pos=(settings["deg2pix"](0), settings["deg2pix"](-RESPONSE_DIAL_SIZE)))
+    draw_circle(
+        stimuli["top_handle"],
+        pos=(settings["deg2pix"](0), settings["deg2pix"](RESPONSE_DIAL_SIZE)),
+    )
+    draw_circle(
+        stimuli["bottom_handle"],
+        pos=(settings["deg2pix"](0), settings["deg2pix"](-RESPONSE_DIAL_SIZE)),
+    )
 
 
 def get_response(

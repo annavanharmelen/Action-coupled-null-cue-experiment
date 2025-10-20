@@ -84,10 +84,7 @@ def get_trigger(
     if target_orientation == "anticlockwise":
         condition_marker += 1
 
-    if (
-        (condition_marker + 1) % 50 == 0
-        or condition_marker > 250
-    ):
+    if (condition_marker + 1) % 50 == 0 or condition_marker > 250:
         info = f"Created condition marker ({condition_marker}) doesn't exist. Received:  {frame}, {block_type}, {congruency}, {target_colour}, {target_position}, {target_orientation}"
         raise Exception(info)
 
