@@ -23,7 +23,7 @@ def get_monitor_and_dir(testing: bool):
         # laptop
         monitor = {
             "resolution": (1920, 1080),  # in pixels
-            "Hz": 60,  # screen refresh rate in Hz
+            "Hz": 90,  # screen refresh rate in Hz
             "width": 33,  # in cm
             "distance": 50,  # in cm
         }
