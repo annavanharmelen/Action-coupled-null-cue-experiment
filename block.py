@@ -107,7 +107,8 @@ def long_break(n_blocks, hit, false_alarm, settings, eyetracker):
     show_text(
         f"Hit: {hit}% \t False alarm: {false_alarm}%\n\n"
         f"You're halfway through! You have {n_blocks // 2} blocks left. "
-        "Now is the time to take a longer break. Maybe get up, stretch, walk around."
+        "Now is the time to take a longer break. You're still hooked up "
+        "to the EEG system, but you can relax a bit."
         "\n\nPress SPACE whenever you're ready to continue again.",
         settings["window"],
     )
@@ -123,11 +124,36 @@ def long_break(n_blocks, hit, false_alarm, settings, eyetracker):
 
     return False
 
+def medium_break(current_block, n_blocks, hit, false_alarm, settings, eyetracker):
+    blocks_left = n_blocks - current_block
+    quartile =  current_block / n_blocks * 4 
+
+    show_text(
+        f"Hit: {hit}% \t False alarm: {false_alarm}%\n\n"
+        f"Nice! You've finished {current_block} blocks already, "
+        f"so you're {'three' if quartile == 3 else 'a'} quarter{'s' if quartile == 3 else ''} of the way through. "
+        f"You have {blocks_left} block{'s' if blocks_left != 1 else ''} left. "
+        "\n\nMake sure you take enough breaks, and remember you can ask the experimenter for something to drink."
+        "\n\nPress SPACE when you're ready to continue.",
+        settings["window"],
+    )
+    settings["window"].flip()
+
+    if eyetracker:
+        keys = wait_for_key(["space", "c"], settings["keyboard"])
+        if "c" in keys:
+            eyetracker.calibrate()
+            eyetracker.start()
+            return True
+    else:
+        wait_for_key(["space"], settings["keyboard"])
+
+    return False
 
 def finish(n_blocks, settings):
     show_text(
         f"Congratulations! You successfully finished all {n_blocks} blocks!"
-        "You're completely done now. Press SPACE to exit the experiment.",
+        "You're completely done now.\n\nPress SPACE to exit the experiment.",
         settings["window"],
     )
     settings["window"].flip()

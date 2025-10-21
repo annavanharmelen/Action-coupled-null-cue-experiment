@@ -26,8 +26,9 @@ from block import (
     create_blocks,
     create_block,
     show_block_type,
-    block_break,
     long_break,
+    medium_break,
+    block_break,
     finish,
     quick_finish,
 )
@@ -208,7 +209,17 @@ def main():
                         eyetracker=None if testing else eyelinker,
                     )
                 if not testing:
-                    eyelinker.start()
+                    eyelinker.start() # this is not actually necessary but it makes me feel safe
+            elif block_nr % (N_BLOCKS // 4) == 0:
+                while calibrated:
+                    calibrated = medium_break(
+                        block_nr,
+                        N_BLOCKS,
+                        hits,
+                        false_alarms,
+                        settings,
+                        eyetracker=None if testing else eyelinker,
+                    )
             elif block_nr < N_BLOCKS:
                 while calibrated:
                     calibrated = block_break(
