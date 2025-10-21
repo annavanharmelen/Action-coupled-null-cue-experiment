@@ -60,13 +60,16 @@ def evaluate_cue_response(key_list, response_required):
 def evaluate_response(report_orientation, target_orientation, key):
     report_orientation = round(report_orientation)
 
-    signed_difference = target_orientation - report_orientation
-    abs_difference = abs(target_orientation - report_orientation)
+    difference = target_orientation - report_orientation
 
-    if abs_difference > 90:
-        abs_difference -= 180
-        abs_difference *= -1
+    if difference > 90:
+        signed_difference = difference - 180
+    elif difference < -90:
+        signed_difference = difference + 180
+    else:
+        signed_difference = difference
 
+    abs_difference = abs(signed_difference)
     performance = round(100 - abs_difference / 90 * 100)
 
     correct_key = (target_orientation > 0 and key == "m") or (
@@ -76,9 +79,10 @@ def evaluate_response(report_orientation, target_orientation, key):
     return {
         "report_orientation": report_orientation,
         "performance": performance,
+        "difference": difference,
+        "signed_difference": signed_difference,
         "absolute_difference": abs_difference,
         "correct_key": correct_key,
-        "signed_difference": signed_difference,
     }
 
 
