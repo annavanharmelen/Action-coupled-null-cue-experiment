@@ -16,10 +16,15 @@ def create_blocks(n_blocks):
         raise Exception("Expected number of blocks to be divisible by 2.")
 
     # Generate an equal number of blocks of all types
+    # ensure also that before and after main break there are equal numbers of both block types
     block_types = ["respond 3", "respond not 3"]
-    blocks = (n_blocks // 2) * block_types
+    blocks_part_1 = (n_blocks // 4) * block_types
+    blocks_part_2 = (n_blocks // 4) * block_types
 
-    random.shuffle(blocks)
+    random.shuffle(blocks_part_1)
+    random.shuffle(blocks_part_2)
+
+    blocks = blocks_part_1 + blocks_part_2
 
     # Save list of sets of block numbers (in order) + block types
     blocks = list(zip(range(1, n_blocks + 1), blocks))
