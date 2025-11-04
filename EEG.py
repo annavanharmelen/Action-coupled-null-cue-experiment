@@ -6,7 +6,7 @@ To run the 'action coupled null-cue' experiment, see main.py.
 made by Anna van Harmelen, 2025, using code by Ezra Nasrawi
 """
 
-from psychopy import parallel
+from psychopy import serial
 
 
 class EEG:
@@ -22,13 +22,11 @@ class EEG:
 
     def __init__(self, port) -> None:
         """
-        This connects to the EEG and tests the connection by setting all pins high and then low.
+        This connects to the EEG.
         """
-        portEEG = parallel.ParallelPort(address=port)
-        portEEG.setData(255)
-        portEEG.setData(0)
+        portEEG = serial.Serial(port)
 
         return portEEG
 
     def send_trigger(self, trigger):
-        self.setData(trigger)
+        self.write(str.encode(trigger))

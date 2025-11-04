@@ -81,7 +81,7 @@ def main():
 
     # Connect to EEG
     if not testing:
-        eeg = EEG(0x3050)
+        eeg = EEG('COM4')
 
     # Connect to eyetracker and calibrate it
     if not testing:
