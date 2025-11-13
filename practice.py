@@ -67,6 +67,7 @@ def practice_dial(testing, stimuli, settings):
             report: dict = get_response(
                 stimuli,
                 target["target_orientation"],
+                target["target_direction"],
                 "#d4d4d4",
                 0,
                 False,
