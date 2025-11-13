@@ -47,7 +47,7 @@ def main():
     """
 
     # Set whether this is a test run or not
-    testing = True
+    testing = False
 
     # first things first: ignore warnings
     logging.console.setLevel(logging.ERROR)
@@ -240,6 +240,7 @@ def main():
     finally:
         # Stop eyetracker (this should also save the data)
         if not testing:
+            eeg.stop()
             eyelinker.stop()
 
         # Save all collected trial data to a new .csv
