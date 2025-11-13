@@ -23,7 +23,7 @@ import random
 
 
 def generate_stimuli_characteristics(
-    congruency, target_colour_id, target_location, target_orientation, settings
+    congruency, target_colour_id, target_location, target_direction, settings
 ):
     distractor_colour_id = 2 if target_colour_id == 1 else 1
 
@@ -42,10 +42,10 @@ def generate_stimuli_characteristics(
         cue_colour = settings["colours"][2]
         cue_colour_id = 3
 
-    if target_orientation == "clockwise":
+    if target_direction == "clockwise":
         target_orientation = random.randint(5, 85)
         distractor_orientation = random.randint(-85, -5)
-    elif target_orientation == "anticlockwise":
+    elif target_direction == "anticlockwise":
         target_orientation = random.randint(-85, -5)
         distractor_orientation = random.randint(5, 85)
 
@@ -68,7 +68,9 @@ def generate_stimuli_characteristics(
         "target_colour": target_colour,
         "target_colour_id": target_colour_id,
         "target_bar": target_location,
+        "target_direction": target_direction,
         "target_orientation": target_orientation,
+        "distractor_orientation": distractor_orientation,
     }
 
 
@@ -102,7 +104,9 @@ def single_trial(
     target_bar,
     target_colour,
     target_colour_id,
+    target_direction,
     target_orientation,
+    distractor_orientation,
     stimuli_colours,
     capture_colour,
     capture_colour_id,
@@ -176,7 +180,7 @@ def single_trial(
                 trial_condition,
                 target_colour_id,
                 target_bar,
-                target_orientation,
+                target_direction,
             )
             eeg.send_trigger(trigger)
             eyetracker.send_trigger(trigger)
@@ -193,7 +197,7 @@ def single_trial(
             trial_condition,
             target_colour_id,
             target_bar,
-            target_orientation,
+            target_direction,
         )
         eeg.send_trigger(trigger)
         eyetracker.send_trigger(trigger)
@@ -203,6 +207,7 @@ def single_trial(
     response = get_response(
         stimuli,
         target_orientation,
+        target_direction,
         target_colour,
         target_colour_id,
         response_required,
@@ -223,7 +228,7 @@ def single_trial(
             trial_condition,
             target_colour_id,
             target_bar,
-            target_orientation,
+            target_direction,
         )
         eeg.send_trigger(trigger)
         eyetracker.send_trigger(trigger)
@@ -243,7 +248,7 @@ def single_trial(
             trial_condition,
             target_colour_id,
             target_bar,
-            target_orientation,
+            target_direction,
         ),
         **response,
     }

@@ -101,6 +101,7 @@ def draw_dial(stimuli, colour, settings):
 def get_response(
     stimuli,
     target_orientation,
+    target_direction,
     target_colour,
     target_colour_id,
     response_required,
@@ -166,7 +167,7 @@ def get_response(
             trial_condition,
             target_colour_id,
             target_bar,
-            target_orientation,
+            target_direction,
         )
         eeg.send_trigger(trigger)
         eyetracker.send_trigger(trigger)
