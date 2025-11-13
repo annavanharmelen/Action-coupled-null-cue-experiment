@@ -12,8 +12,8 @@ from response import wait_for_key
 
 
 def create_blocks(n_blocks):
-    if n_blocks % 2 != 0:
-        raise Exception("Expected number of blocks to be divisible by 2.")
+    if n_blocks % 4 != 0:
+        raise Exception("Expected number of blocks to be divisible by 4.")
 
     # Generate an equal number of blocks of all types
     # ensure also that before and after main break there are equal numbers of both block types

@@ -112,8 +112,7 @@ def main():
     # Start experiment
     try:
         # Generate pseudo-random order of blocks
-        blocks = create_blocks(2 if testing else N_BLOCKS)
-
+        blocks = create_blocks(4 if testing else N_BLOCKS)
         for block_nr, block_type in blocks:
             # Create temporary variable for saving block performance
             block_hit = []
