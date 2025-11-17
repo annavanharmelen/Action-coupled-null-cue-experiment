@@ -182,8 +182,8 @@ def single_trial(
                 target_bar,
                 target_direction,
             )
-            eeg.send_trigger(trigger)
-            eyetracker.send_trigger(trigger)
+            settings["window"].callOnFlip(eeg.send_trigger, trigger)
+            settings["window"].callOnFlip(eyetracker.send_trigger, trigger)
 
         # Draw the next screen while showing the current one
         do_while_showing(duration, screens[index + 1][1], settings["window"])
@@ -199,8 +199,8 @@ def single_trial(
             target_bar,
             target_direction,
         )
-        eeg.send_trigger(trigger)
-        eyetracker.send_trigger(trigger)
+        settings["window"].callOnFlip(eeg.send_trigger, trigger)
+        settings["window"].callOnFlip(eyetracker.send_trigger, trigger)
 
     settings["window"].flip()
 
@@ -230,9 +230,9 @@ def single_trial(
             target_bar,
             target_direction,
         )
-        eeg.send_trigger(trigger)
-        eyetracker.send_trigger(trigger)
-
+        settings["window"].callOnFlip(eeg.send_trigger, trigger)
+        settings["window"].callOnFlip(eyetracker.send_trigger, trigger)
+    
     # Show performance
     draw_fixation_dot(stimuli["fixation_dot"], stimuli["block_info_signal"], block_type)
     show_text(

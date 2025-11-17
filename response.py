@@ -169,8 +169,8 @@ def get_response(
             target_bar,
             target_direction,
         )
-        eeg.send_trigger(trigger)
-        eyetracker.send_trigger(trigger)
+        window.callOnFlip(eeg.send_trigger, trigger)
+        window.callOnFlip(eyetracker.send_trigger, trigger)
 
     # Stop rotating the moment either of the following happens:
     # - the participant released the rotation key
