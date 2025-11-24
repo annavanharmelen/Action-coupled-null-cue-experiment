@@ -34,7 +34,16 @@ def initialise_all_stimuli(settings):
     )
 
     # Create block info signal
-    respond_3_signal = visual.TextStim(
+    respond_3_signal_1 = visual.TextStim(
+        win=settings["window"],
+        font="Courier New",
+        text="+",
+        color="#ffffff",
+        pos=(-settings["deg2pix"](20), -settings["deg2pix"](11)),
+        height=22,
+    )
+
+    respond_3_signal_2 = visual.TextStim(
         win=settings["window"],
         font="Courier New",
         text="+",
@@ -43,7 +52,16 @@ def initialise_all_stimuli(settings):
         height=22,
     )
 
-    respond_not_3_signal = visual.TextStim(
+    respond_not_3_signal_1 = visual.TextStim(
+        win=settings["window"],
+        font="Courier New",
+        text="-",
+        color="#ffffff",
+        pos=(-settings["deg2pix"](20), -settings["deg2pix"](11)),
+        height=22,
+    )
+
+    respond_not_3_signal_2 = visual.TextStim(
         win=settings["window"],
         font="Courier New",
         text="-",
@@ -91,8 +109,8 @@ def initialise_all_stimuli(settings):
     return {
         "fixation_dot": {"decentral_dot": decentral_dot, "fixation_dot": fixation_dot},
         "block_info_signal": {
-            "respond 3": respond_3_signal,
-            "respond not 3": respond_not_3_signal,
+            "respond 3": (respond_3_signal_1, respond_3_signal_2),
+            "respond not 3": (respond_not_3_signal_1, respond_not_3_signal_2),
         },
         "bar": bar_stimulus,
         "probe_circle": probe,
@@ -112,7 +130,8 @@ def draw_fixation_dot(dot_items, block_info, block_type, colour="#eaeaea"):
 
     # Show this if there is something to show
     if block_info is not None and block_type is not None:
-        block_info[block_type].draw()
+        block_info[block_type][0].draw()
+        block_info[block_type][1].draw()
 
 
 def show_text(input, window, pos=(0, 0), colour="#ffffff"):
