@@ -141,13 +141,15 @@ def practice_indefinitely(
             target_present.append(determine_response_required(block_type, cue_colour))
 
     except KeyboardInterrupt:
+        if len(hit) > 0 and any(target_present):
+            hit_score = round(mean(hit) / mean(target_present) * 100)
+        else:
+            hit_score = 0
 
-        hit_score = round(mean(hit) / mean(target_present) * 100) if len(hit) > 1 else 0
-        false_alarm_score = (
-            round(mean(false_alarm) / (1 - mean(target_present)) * 100)
-            if len(false_alarm) > 1
-            else 0
-        )
+        if len(false_alarm) > 0 and not all(target_present):
+            false_alarm_score = round(mean(false_alarm) / (1 - mean(target_present)) * 100)
+        else:
+            false_alarm_score = 0
 
         if first_block:
             show_text(
