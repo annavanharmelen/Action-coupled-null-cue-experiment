@@ -39,7 +39,7 @@ def get_monitor_and_dir(testing: bool):
             "distance": 70,  # in cm
         }
 
-        directory = r"C:\Users\Anna_vidi\Desktop\eeg test data"
+        directory = r"C:\Users\action-coupled\Desktop\EEG data - GEDRAG"
 
     return monitor, directory
 
