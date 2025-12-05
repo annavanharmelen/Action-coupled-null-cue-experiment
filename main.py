@@ -209,7 +209,7 @@ def main():
                     )
                 if not testing:
                     eyelinker.start() # this is not actually necessary but it makes me feel safe
-            elif block_nr % (N_BLOCKS // 4) == 0:
+            elif block_nr % (N_BLOCKS // 4) == 0 and block_nr < N_BLOCKS:
                 while calibrated:
                     calibrated = medium_break(
                         block_nr,
