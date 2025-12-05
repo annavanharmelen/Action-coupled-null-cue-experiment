@@ -221,18 +221,6 @@ def single_trial(
         capture_colour,
     )
 
-    if not testing:
-        trigger = get_trigger(
-            "response_offset",
-            block_type,
-            trial_condition,
-            target_colour_id,
-            target_bar,
-            target_direction,
-        )
-        settings["window"].callOnFlip(eeg.send_trigger, trigger)
-        settings["window"].callOnFlip(eyetracker.send_trigger, trigger)
-    
     # Show performance
     draw_fixation_dot(stimuli["fixation_dot"], stimuli["block_info_signal"], block_type)
     show_text(

@@ -65,7 +65,6 @@ def get_trigger(
         "capture_cue_onset": 51,
         "probe_cue_onset": 101,
         "response_onset": 151,
-        "response_offset": 201,
     }[frame]
 
     if block_type == "respond not 3":
