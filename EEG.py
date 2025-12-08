@@ -9,6 +9,7 @@ made by Anna van Harmelen, 2025, using code by Ezra Nasrawi
 import serial
 from psychopy import core
 
+
 class EEG:
     """
     usage:
@@ -28,6 +29,8 @@ class EEG:
 
     def send_trigger(self, trigger):
         self.port.write(bytes([trigger]))
+        self.port.flush()
+        core.wait(0.003)  # wait for 3 ms
 
     def stop(self):
         self.port.close()
